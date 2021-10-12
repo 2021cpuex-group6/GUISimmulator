@@ -4,22 +4,24 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
-public class RegistersPanel extends JPanel{
+public class RegistersPane extends JScrollPane{
 
-    private final static int REGISTERS_COL_N = 8;
-    private final static int REGISTERS_ROW_N = 4;
+    private final static int REGISTERS_COL_N = 1;
+    private final static int REGISTERS_ROW_N = 32;
+    private final static int SCROLL_INCREMENT = 30;
+
 
     private JPanel iPanel;
     private JPanel fPanel;
 
-    public RegistersPanel(){
+    public RegistersPane(){
         super();
         iPanel = getIPanel();
+        getVerticalScrollBar().setUnitIncrement(SCROLL_INCREMENT);
 
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        add(iPanel);
-
+        setViewportView(iPanel);
     }
 
     private JPanel getIPanel(){

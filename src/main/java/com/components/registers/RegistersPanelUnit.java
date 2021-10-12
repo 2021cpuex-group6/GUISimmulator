@@ -17,13 +17,15 @@ public class RegistersPanelUnit extends JPanel implements FocusListener{
 
     public RegistersPanelUnit(String name, String initV){
         super();
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
         label = new JLabel(name);
         label.setHorizontalAlignment(JLabel.CENTER);
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
         field = new JTextField(initV, FIELD_W);
         field.setAlignmentX(Component.CENTER_ALIGNMENT);
+        field.setHorizontalAlignment(JTextField.RIGHT);
         fieldV = Integer.parseInt(initV);
         field.setInputVerifier(new IntegerInputVerifier());
         field.addFocusListener(this);
