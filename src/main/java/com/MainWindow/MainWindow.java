@@ -6,6 +6,7 @@ import java.awt.event.WindowListener;
 import java.awt.BorderLayout;
 import java.util.Properties;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -32,6 +33,7 @@ public class MainWindow extends JFrame implements WindowListener{
 
         JPanel panel = new JPanel(new BorderLayout());
         registersPanel = new RegistersPanel();
+        panel.add(new JButton("test"), BorderLayout.NORTH);
         panel.add(registersPanel);
 
         setContentPane(panel);

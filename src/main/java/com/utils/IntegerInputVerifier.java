@@ -14,9 +14,24 @@ public class IntegerInputVerifier extends InputVerifier {
     @Override public boolean verify(JComponent c) {
       boolean verified = false;
       JTextField textField = (JTextField) c;
-      try {
-        Integer.parseInt(textField.getText());
-        verified = true;
+      String text = textField.getText();
+      int ans = 0;
+      try{
+          ans = Integer.parseInt(text);
+          return true;
+      }catch(NumberFormatException e){
+      }
+      try{
+          if(text.startsWith("0x")){
+              ans = Integer.parseUnsignedInt(text.substring(2), 16);
+          }else if(text.startsWith("0b")){
+              ans = Integer.parseUnsignedInt(text.substring(2), 2);
+          }else if(text.startsWith("0o")){
+              ans = Integer.parseUnsignedInt(text.substring(2), 8);
+          }else{
+              ans = Integer.parseUnsignedInt(text.substring(2));
+          }
+          verified = true;
       } catch (NumberFormatException e) {
         UIManager.getLookAndFeel().provideErrorFeedback(c);
         // Toolkit.getDefaultToolkit().beep();
