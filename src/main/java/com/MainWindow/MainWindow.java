@@ -9,13 +9,17 @@ import java.util.Properties;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import com.components.registers.RegistersPanel;
+
 public class MainWindow extends JFrame implements WindowListener{
     private final static String TITLE = "CPUSimmulator";
     private final String INIT_X = "initX";
     private final String INIT_Y = "initY";
     private final String INIT_W = "initW";
     private final String INIT_H = "initH";
+
     private Properties properties;
+    private JPanel registersPanel;
 
     public MainWindow(Properties properties){
         super();
@@ -27,6 +31,10 @@ public class MainWindow extends JFrame implements WindowListener{
         addWindowListener(this);
 
         JPanel panel = new JPanel(new BorderLayout());
+        registersPanel = new RegistersPanel();
+        panel.add(registersPanel);
+
+        setContentPane(panel);
 
     }
 

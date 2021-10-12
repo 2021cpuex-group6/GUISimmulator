@@ -5,7 +5,12 @@ import javax.swing.JComponent;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
-class IntegerInputVerifier extends InputVerifier {
+public class IntegerInputVerifier extends InputVerifier {
+
+    public IntegerInputVerifier(){
+        super();
+    }
+
     @Override public boolean verify(JComponent c) {
       boolean verified = false;
       JTextField textField = (JTextField) c;
