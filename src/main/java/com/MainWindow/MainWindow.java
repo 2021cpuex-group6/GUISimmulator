@@ -1,5 +1,7 @@
 package com.MainWindow;
 
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Rectangle;
@@ -12,8 +14,10 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.border.BevelBorder;
 
 import com.components.Controls.ControlPanel;
 import com.components.registers.RegistersPane;
@@ -28,6 +32,7 @@ public class MainWindow extends JFrame implements WindowListener{
     private final String INIT_H = "initH";
 
 
+    private JLabel messageLabel;
     private JPanel mainPanel;
     private Properties properties;
     private RegistersPane registersPanel;
@@ -44,24 +49,26 @@ public class MainWindow extends JFrame implements WindowListener{
         addWindowListener(this);
 
         
+        JPanel outerPanel = new JPanel(new BorderLayout());
+
         mainPanel = new JPanel();
-        layout = new GridBagLayout();
-        // mainPanel.setLayout(layout);
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
         registersPanel = new RegistersPane();
         controlPanel = new ControlPanel();
         mainPanel.add(registersPanel);
         mainPanel.add(controlPanel);
 
-        // addComponent(registersPanel, 0, 0, 1, GRID_H);
-        // addComponent(controlPanel, 1, GRID_H-1, GRID_W-1, 1);
+        JPanel messagePanel = getMessagePanel();
+        
+        outerPanel.add(mainPanel, BorderLayout.CENTER);
+        outerPanel.add(messagePanel, BorderLayout.SOUTH);
 
-        setContentPane(mainPanel);
+        setContentPane(outerPanel);
         
 
     }
 
-    public void addComponent(JComponent comp, int x, int y, int w, int h){
+    private  void addComponent(JComponent comp, int x, int y, int w, int h){
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridx = x;
@@ -70,6 +77,19 @@ public class MainWindow extends JFrame implements WindowListener{
         gbc.gridheight = h;
         layout.setConstraints(comp, gbc);
         mainPanel.add(comp);
+    }
+
+    private JPanel getMessagePanel(){
+        JPanel panel = new JPanel();
+        panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        panel.setBorder(new BevelBorder(BevelBorder.LOWERED));
+
+        JLabel message = new JLabel("test");
+        message.setFont(new Font(Font.DIALOG_INPUT, Font.PLAIN, 15));
+        panel.add(message);
+
+        return panel;
+
     }
 
     @Override

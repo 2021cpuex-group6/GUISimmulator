@@ -1,13 +1,25 @@
 package com.components.Controls;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.GridLayout;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class ControlPanel extends JPanel {
     final static int BUTTON_N = 4;
+    final static int PANEL_W = 300;
+    final static int PANEL_H = 50;
+
+    final static int BUTTON_W = 50;
+    final static int BUTTON_H = 30;
+
+    private static final String FILE_B_TEXT = "File";
 
     private static final String NEXT_B_TEXT = ">";
     private static final String NEXT_BB_TEXT = ">|";
@@ -22,22 +34,49 @@ public class ControlPanel extends JPanel {
 
     public ControlPanel(){
         super();
+        setLayout(new GridLayout(2, 1));
         JPanel innerPanel = new JPanel();
-        innerPanel.setLayout(new GridLayout(1, BUTTON_N));
+        innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.X_AXIS));
         nextButton = new JButton(NEXT_B_TEXT);
         nextBreakButton = new JButton(NEXT_BB_TEXT);
         nextAllButton = new JButton(NEXT_BA_TEXT);
         backButton = new JButton(BACK_B_TEXT);
+        nextButton.setMaximumSize(new Dimension(BUTTON_W, BUTTON_H));
+        nextBreakButton.setMaximumSize(new Dimension(BUTTON_W, BUTTON_H));
+        nextAllButton.setMaximumSize(new Dimension(BUTTON_W, BUTTON_H));
+        backButton.setMaximumSize(new Dimension(BUTTON_W, BUTTON_H));
 
         buttonSetup();
+        innerPanel.add(Box.createHorizontalGlue());
         innerPanel.add(backButton);
+        innerPanel.add(Box.createHorizontalGlue());
         innerPanel.add(nextButton);
+        innerPanel.add(Box.createHorizontalGlue());
         innerPanel.add(nextBreakButton);
+        innerPanel.add(Box.createHorizontalGlue());
         innerPanel.add(nextAllButton);
+        innerPanel.add(Box.createHorizontalGlue());
 
         add(innerPanel);
-        
+        add(getFilePanel());
 
+        setPreferredSize(new Dimension(PANEL_W, PANEL_H));
+                
+
+    }
+
+    private JPanel getFilePanel(){
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+
+        JButton button = new JButton(FILE_B_TEXT);
+        JLabel label = new JLabel("");
+
+        panel.add(Box.createHorizontalStrut(BUTTON_W));
+        panel.add(button);
+        panel.add(label);
+
+        return panel;
     }
 
     private void buttonSetup() {
