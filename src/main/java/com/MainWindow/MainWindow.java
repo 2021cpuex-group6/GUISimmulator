@@ -38,6 +38,7 @@ public class MainWindow extends JFrame implements WindowListener{
         panel.add(registersPanel);
 
         setContentPane(panel);
+        
 
     }
 
