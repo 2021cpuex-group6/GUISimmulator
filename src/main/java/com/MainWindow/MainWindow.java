@@ -1,27 +1,38 @@
 package com.MainWindow;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Rectangle;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.BorderLayout;
 import java.util.Properties;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import com.components.Controls.ControlPanel;
 import com.components.registers.RegistersPane;
 
 public class MainWindow extends JFrame implements WindowListener{
+    private final static int GRID_W = 5;
+    private final static int GRID_H = 5;
     private final static String TITLE = "CPUSimmulator";
     private final String INIT_X = "initX";
     private final String INIT_Y = "initY";
     private final String INIT_W = "initW";
     private final String INIT_H = "initH";
 
+
+    private JPanel mainPanel;
     private Properties properties;
-    private JScrollPane registersPanel;
+    private RegistersPane registersPanel;
+    private ControlPanel controlPanel;
+    private GridBagLayout layout;
 
     public MainWindow(Properties properties){
         super();
@@ -32,14 +43,33 @@ public class MainWindow extends JFrame implements WindowListener{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         addWindowListener(this);
 
-        JPanel panel = new JPanel(new BorderLayout());
+        
+        mainPanel = new JPanel();
+        layout = new GridBagLayout();
+        // mainPanel.setLayout(layout);
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
         registersPanel = new RegistersPane();
-        panel.add(new JButton("test"), BorderLayout.NORTH);
-        panel.add(registersPanel);
+        controlPanel = new ControlPanel();
+        mainPanel.add(registersPanel);
+        mainPanel.add(controlPanel);
 
-        setContentPane(panel);
+        // addComponent(registersPanel, 0, 0, 1, GRID_H);
+        // addComponent(controlPanel, 1, GRID_H-1, GRID_W-1, 1);
+
+        setContentPane(mainPanel);
         
 
+    }
+
+    public void addComponent(JComponent comp, int x, int y, int w, int h){
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.gridx = x;
+        gbc.gridy = y;
+        gbc.gridwidth = w;
+        gbc.gridheight = h;
+        layout.setConstraints(comp, gbc);
+        mainPanel.add(comp);
     }
 
     @Override

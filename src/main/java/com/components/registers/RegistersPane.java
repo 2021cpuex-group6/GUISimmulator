@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 
-public class RegistersPane extends JScrollPane{
+public class RegistersPane extends JPanel{
 
     private final static int REGISTER_N = 32;
     private final static int REGISTERS_COL_N = 1;
@@ -32,13 +32,20 @@ public class RegistersPane extends JScrollPane{
         fRegisters = new ArrayList<>(REGISTER_N);
         iPanel = getIPanel();
         fPanel = getFPanel();
-        getVerticalScrollBar().setUnitIncrement(SCROLL_INCREMENT);
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.getVerticalScrollBar().setUnitIncrement(SCROLL_INCREMENT);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
         JPanel panel = new JPanel(new GridLayout(1, 2));
         panel.add(iPanel);
         panel.add(fPanel);
 
-        setViewportView(panel);
+        scrollPane.setViewportView(panel);
+
+        setLayout(new BorderLayout());
+        add(scrollPane, BorderLayout.CENTER);
+        add(Box.createVerticalStrut(100), BorderLayout.WEST);
+
     }
 
     private JPanel getIPanel(){
