@@ -16,6 +16,21 @@ public class OuterProcessHandler {
     private final static String SIMMULATOR_EXE = "main.exe";
     private final static String CHARA_CODE = "Shift-JIS";
     private final static String ERROR_CODE = "Error";
+    private final static String BUG_REPORT = "バグと思われるので報告お願いします。";
+
+    protected final static String COMMAND_DO_ALL = "a";
+    protected final static String COMMAND_NEXT_BLOCK = "nb";
+    protected final static String COMMAND_NEXT = "n";
+    protected final static String COMMAND_BREAK_SET = "bs";
+    // protected final static String COMMAND_BREAK_LIST = "bl";
+    protected final static String COMMAND_BREAK_DELETE = "bd";
+    protected final static String COMMAND_REG_READ = "rr";
+    protected final static String COMMAND_REG_WRITE = "rw";
+    protected final static String COMMAND_BACK = "ba";
+    protected final static String COMMAND_RESET = "re";
+    protected final static String COMMAND_INFO = "i";
+    protected final static String COMMAND_QUIT = "quit";
+    
 
     private PrintStream sender; // プログラムに送る
     private BufferedReader receiver; //結果受け取り
@@ -49,6 +64,9 @@ public class OuterProcessHandler {
                     message += System.lineSeparator() + String.format("%d行目", lineN);
                 }
                 message += System.lineSeparator() + receiver.readLine();
+                if(lineN <= 0){
+                    message += System.lineSeparator() + BUG_REPORT;
+                }
                 JFrame frame = new JFrame();
 
                 JOptionPane.showMessageDialog(frame, message);

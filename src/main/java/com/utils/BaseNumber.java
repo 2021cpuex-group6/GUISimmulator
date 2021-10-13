@@ -10,4 +10,8 @@ public enum BaseNumber {
     private BaseNumber(final int value){
         this.value = value;
     }
+
+    public int GetValue(){
+        return value;
+    }
 }
