@@ -3,13 +3,18 @@ package com.components.Controls;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.Properties;
 import java.awt.GridLayout;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import com.MainWindow.PropertiesClass;
 
 public class ControlPanel extends JPanel {
     final static int BUTTON_N = 4;
@@ -26,14 +31,22 @@ public class ControlPanel extends JPanel {
     private static final String NEXT_BA_TEXT = ">>";
     private static final String BACK_B_TEXT = "<";
 
+    private static final String LAST_DIRECTORY = "lastDirectory";
+
 
     private JButton nextButton;
     private JButton nextBreakButton;
     private JButton nextAllButton;
     private JButton backButton;
+    private JPanel controlPanel;
 
-    public ControlPanel(){
+    private File opendFile;
+    private Properties property;
+
+    public ControlPanel(Properties property){
         super();
+        this.property = property;
+        controlPanel = this;
         setLayout(new GridLayout(2, 1));
         JPanel innerPanel = new JPanel();
         innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.X_AXIS));
@@ -70,6 +83,30 @@ public class ControlPanel extends JPanel {
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 
         JButton button = new JButton(FILE_B_TEXT);
+        button.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO Auto-generated method stub
+                String lastPath = property.getProperty(LAST_DIRECTORY);
+                File lastAccessedFolder = new File(lastPath);
+                JFileChooser chooser;
+                if(lastPath.equals("")){
+                    chooser = new JFileChooser();
+                }else{
+                    chooser = new JFileChooser(lastAccessedFolder);
+                }
+                int selected = chooser.showOpenDialog(controlPanel);
+                if(selected == JFileChooser.APPROVE_OPTION){
+                    // 何かファイルが指定された
+                    opendFile = chooser.getSelectedFile();
+                    property.setProperty(LAST_DIRECTORY, opendFile.getParent());
+                    PropertiesClass.setProperties(property);
+                }
+                
+            }
+
+        });
         JLabel label = new JLabel("");
 
         panel.add(Box.createHorizontalStrut(BUTTON_W));
