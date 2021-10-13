@@ -14,7 +14,6 @@ import com.utils.ConstantsClass;
 
 public class RegistersPane extends JPanel{
 
-    private final static int REGISTER_N = 32;
     private final static int REGISTERS_COL_N = 1;
     private final static int REGISTERS_ROW_N = 32;
 
@@ -29,8 +28,8 @@ public class RegistersPane extends JPanel{
 
     public RegistersPane(){
         super();
-        iRegisters = new ArrayList<>(REGISTER_N);
-        fRegisters = new ArrayList<>(REGISTER_N);
+        iRegisters = new ArrayList<>(ConstantsClass.REGISTER_N);
+        fRegisters = new ArrayList<>(ConstantsClass.REGISTER_N);
         iPanel = getIPanel();
         fPanel = getFPanel();
         JScrollPane scrollPane = new JScrollPane();
@@ -62,9 +61,9 @@ public class RegistersPane extends JPanel{
         
         // 32個のレジスタを配置
         JPanel registersPanel = new JPanel();
-        registersPanel.setLayout(new GridLayout(REGISTER_N+2, 1));
+        registersPanel.setLayout(new GridLayout(ConstantsClass.REGISTER_N+2, 1));
         
-        for (int i = 0; i < REGISTER_N; i++) {
+        for (int i = 0; i < ConstantsClass.REGISTER_N; i++) {
             String name = String.format("x%02d ", i);
             RegistersPanelUnit register = new RegistersPanelUnit(name, "0");
             iRegisters.add(register);
@@ -89,9 +88,9 @@ public class RegistersPane extends JPanel{
         
         // 32個のレジスタを配置
         JPanel registersPanel = new JPanel();
-        registersPanel.setLayout(new GridLayout(REGISTER_N+2, 1));
+        registersPanel.setLayout(new GridLayout(ConstantsClass.REGISTER_N+2, 1));
         
-        for (int i = 0; i < REGISTER_N; i++) {
+        for (int i = 0; i < ConstantsClass.REGISTER_N; i++) {
             String name = String.format("f%02d ", i);
             RegistersPanelUnit register = new RegistersPanelUnit(name, "0");
             fRegisters.add(register);
@@ -104,11 +103,11 @@ public class RegistersPane extends JPanel{
         return panel;
     }
 
-    private void setRegister(boolean forInteger, int index, int value){
+    public void setRegister(boolean forInteger, int index, int value){
         // レジスタに値をセット
         // forInteger ... 整数レジスタへセットするならtrue, 浮動小数点レジスタならfalse
         if(forInteger){
-            if(index == REGISTER_N){
+            if(index == ConstantsClass.REGISTER_N){
                 pc.setFieldV(value);
             }else{
                 iRegisters.get(index).setFieldV(value);
