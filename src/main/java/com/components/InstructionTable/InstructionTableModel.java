@@ -9,8 +9,10 @@ import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
 
+import com.utils.ConstantsClass;
+
 public class InstructionTableModel extends DefaultTableModel{
-    final static int INSTRUCTION_BYTE_N = 4;
+
     final static String BREAK_COLUMN = "Break";
     final static String ADDRESS_COLUMN = "Address";
     final static String INSTRUCTION_COLUMN = "Instruction";
@@ -51,7 +53,7 @@ public class InstructionTableModel extends DefaultTableModel{
             int i = 0;
             while(now != null){
                 instructionList.set(i, now);
-                addressList.set(i, String.format(ADDRESS_FORMAT, i*INSTRUCTION_BYTE_N));
+                addressList.set(i, String.format(ADDRESS_FORMAT, i*ConstantsClass.INSTRUCTION_BYTE_N));
                 now = br.readLine();
             }
             br.close();
