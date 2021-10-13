@@ -12,6 +12,7 @@ import javax.swing.table.DefaultTableModel;
 import com.utils.ConstantsClass;
 
 public class InstructionTableModel extends DefaultTableModel{
+    private final static int BREAK_C_NUM = 0;
 
     final static String BREAK_COLUMN = "Break";
     final static String ADDRESS_COLUMN = "Address";
@@ -77,9 +78,17 @@ public class InstructionTableModel extends DefaultTableModel{
             case 0:
                 return Boolean.class;
             case 1:
-                return Integer.class;
+                return String.class;
             default:
                 return String.class;
         }
     }
+
+    @Override public boolean isCellEditable(int row, int column) {
+        // breakPoints以外は編集不可
+        if(column == BREAK_C_NUM){
+            return true;
+        }
+        return false;
+      }
 }
