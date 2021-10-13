@@ -52,9 +52,11 @@ public class InstructionTableModel extends DefaultTableModel{
             now = br.readLine();
             int i = 0;
             while(now != null){
-                instructionList.set(i, now);
-                addressList.set(i, String.format(ADDRESS_FORMAT, i*ConstantsClass.INSTRUCTION_BYTE_N));
+                instructionList.add(now);
+                addressList.add(String.format(ADDRESS_FORMAT, i*ConstantsClass.INSTRUCTION_BYTE_N));
+                breakList.add(false);
                 now = br.readLine();
+                i++;
             }
             br.close();
             

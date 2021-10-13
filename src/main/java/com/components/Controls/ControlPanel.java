@@ -16,6 +16,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.MainWindow.MainWindow;
 import com.MainWindow.PropertiesClass;
 
 public class ControlPanel extends JPanel {
@@ -45,10 +46,12 @@ public class ControlPanel extends JPanel {
 
     private File opendFile;
     private Properties property;
+    private MainWindow mainWindow;
 
-    public ControlPanel(Properties property){
+    public ControlPanel(Properties property, MainWindow mainWindow){
         super();
         this.property = property;
+        this.mainWindow = mainWindow;
         controlPanel = this;
         setLayout(new BorderLayout());
         JPanel innerPanel = new JPanel();
@@ -115,6 +118,7 @@ public class ControlPanel extends JPanel {
                     property.setProperty(LAST_DIRECTORY, opendFile.getParent());
                     PropertiesClass.setProperties(property);
                     fileLabel.setText(opendFile.getPath());
+                    mainWindow.connecter.instructionFileSet(opendFile.getPath());
 
                 }
                 

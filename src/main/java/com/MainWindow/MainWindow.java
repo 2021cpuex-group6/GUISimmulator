@@ -20,6 +20,7 @@ import javax.swing.JScrollPane;
 import javax.swing.border.BevelBorder;
 
 import com.components.Controls.ControlPanel;
+import com.components.InstructionTable.InstructionTablePanel;
 import com.components.registers.RegistersPane;
 
 public class MainWindow extends JFrame implements WindowListener{
@@ -34,13 +35,17 @@ public class MainWindow extends JFrame implements WindowListener{
 
     private JLabel messageLabel;
     private JPanel mainPanel;
-    private Properties properties;
-    private RegistersPane registersPanel;
-    private ControlPanel controlPanel;
+    protected Properties properties;
+    protected RegistersPane registersPanel;
+    protected InstructionTablePanel instructionPanel;
+    protected ControlPanel controlPanel;
     private GridBagLayout layout;
+
+    public PanelsConnecter connecter;
 
     public MainWindow(Properties properties){
         super();
+        connecter = new PanelsConnecter(this);
         setTitle(TITLE);
         this.properties = properties;
         setBounds(Integer.parseInt(properties.getProperty(INIT_X)), Integer.parseInt(properties.getProperty(INIT_Y)),
@@ -54,9 +59,9 @@ public class MainWindow extends JFrame implements WindowListener{
         mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
         registersPanel = new RegistersPane();
-        controlPanel = new ControlPanel(properties);
+        JPanel centerPanel = getCenterPanel();
         mainPanel.add(registersPanel);
-        mainPanel.add(controlPanel);
+        mainPanel.add(centerPanel);
 
         JPanel messagePanel = getMessagePanel();
         
@@ -66,6 +71,19 @@ public class MainWindow extends JFrame implements WindowListener{
         setContentPane(outerPanel);
         
 
+    }
+
+    private JPanel getCenterPanel(){
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        
+        controlPanel = new ControlPanel(properties, this);
+        instructionPanel = new InstructionTablePanel();
+
+        panel.add(instructionPanel);
+        panel.add(controlPanel);
+
+        return panel;
     }
 
     private  void addComponent(JComponent comp, int x, int y, int w, int h){
