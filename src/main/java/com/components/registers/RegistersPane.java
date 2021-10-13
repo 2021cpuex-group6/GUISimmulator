@@ -10,13 +10,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 
+import com.utils.ConstantsClass;
+
 public class RegistersPane extends JPanel{
 
     private final static int REGISTER_N = 32;
     private final static int REGISTERS_COL_N = 1;
     private final static int REGISTERS_ROW_N = 32;
-    private final static int SCROLL_INCREMENT = 30;
-    private final static int SEPARATE_INTERVAL = 5;
+
 
 
     private ArrayList<RegistersPanelUnit> iRegisters;
@@ -33,7 +34,7 @@ public class RegistersPane extends JPanel{
         iPanel = getIPanel();
         fPanel = getFPanel();
         JScrollPane scrollPane = new JScrollPane();
-        scrollPane.getVerticalScrollBar().setUnitIncrement(SCROLL_INCREMENT);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(ConstantsClass.SCROLL_INCREMENT);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
         JPanel panel = new JPanel(new GridLayout(1, 2));
@@ -55,9 +56,9 @@ public class RegistersPane extends JPanel{
         innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.Y_AXIS));
         pc = new RegistersPanelUnit("  pc", "0");
         innerPanel.add(pc);
-        innerPanel.add(Box.createVerticalStrut(SEPARATE_INTERVAL));
+        innerPanel.add(Box.createVerticalStrut(ConstantsClass.SEPARATE_INTERVAL));
         innerPanel.add(new JSeparator());
-        innerPanel.add(Box.createVerticalStrut(SEPARATE_INTERVAL));
+        innerPanel.add(Box.createVerticalStrut(ConstantsClass.SEPARATE_INTERVAL));
         
         // 32個のレジスタを配置
         JPanel registersPanel = new JPanel();
@@ -82,9 +83,9 @@ public class RegistersPane extends JPanel{
         innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.Y_AXIS));
         fcsr = new RegistersPanelUnit("fcsr", "0");
         innerPanel.add(fcsr);
-        innerPanel.add(Box.createVerticalStrut(SEPARATE_INTERVAL));
+        innerPanel.add(Box.createVerticalStrut(ConstantsClass.SEPARATE_INTERVAL));
         innerPanel.add(new JSeparator());
-        innerPanel.add(Box.createVerticalStrut(SEPARATE_INTERVAL));
+        innerPanel.add(Box.createVerticalStrut(ConstantsClass.SEPARATE_INTERVAL));
         
         // 32個のレジスタを配置
         JPanel registersPanel = new JPanel();
