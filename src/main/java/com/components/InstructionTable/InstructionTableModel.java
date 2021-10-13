@@ -10,6 +10,7 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
 import com.utils.ConstantsClass;
+import com.utils.ErrorChecker;
 
 public class InstructionTableModel extends DefaultTableModel{
     private final static int BREAK_C_NUM = 0;
@@ -63,9 +64,9 @@ public class InstructionTableModel extends DefaultTableModel{
             
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            ErrorChecker.errorCheck(e);
         } catch (IOException e) {
-            e.printStackTrace();
+            ErrorChecker.errorCheck(e);
         }
         addColumn(BREAK_COLUMN, breakList);
         addColumn(ADDRESS_COLUMN, addressList);
