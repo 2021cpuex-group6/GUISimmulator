@@ -103,4 +103,16 @@ public class RegistersPane extends JPanel{
 
         return panel;
     }
+
+    private void setRegister(boolean forInteger, int index, int value){
+        // レジスタに値をセット
+        // forInteger ... 整数レジスタへセットするならtrue, 浮動小数点レジスタならfalse
+        if(forInteger){
+            if(index == REGISTER_N){
+                pc.setFieldV(value);
+            }else{
+                iRegisters.get(index).setFieldV(value);
+            }
+        }
+    }
 }
