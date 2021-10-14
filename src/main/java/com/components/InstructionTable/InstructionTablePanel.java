@@ -13,9 +13,9 @@ import com.utils.ConstantsClass;
 import java.awt.BorderLayout;
 
 public class InstructionTablePanel extends JPanel{
-    private final static int BREAK_C_WIDTH = 30;
+    private final static int BREAK_C_WIDTH = 40;
     private final static int ADDRESS_C_WIDTH = 50;
-    private final static int INSTRUCTION_C_WIDTH = 250;
+    private final static int INSTRUCTION_C_WIDTH = 350;
 
 
     private InstructionTableModel model;
@@ -38,7 +38,7 @@ public class InstructionTablePanel extends JPanel{
         add(scrollPane, BorderLayout.CENTER);
         add(Box.createVerticalStrut(ConstantsClass.SEPARATE_INTERVAL), BorderLayout.SOUTH);
 
-        setMaximumSize(new Dimension(300, 200));
+        setMaximumSize(new Dimension(400, 300));
 
     }
 

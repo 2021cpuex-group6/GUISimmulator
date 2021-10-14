@@ -36,6 +36,11 @@ public class ControlPanel extends JPanel {
     private static final String NEXT_BA_TEXT = ">>";
     private static final String BACK_B_TEXT = "<";
 
+    private static final String NEXT_B_DESCRIPTION = "次の命令を実行";
+    private static final String NEXT_BB_DESCRIPTION = "次のブレークポイントまでを実行(未実装)";
+    private static final String NEXT_AB_DESCRIPTION = "全命令実行";
+    private static final String BACK_B_DESCRIPTION = "命令を一つ戻る";
+
     private static final String LAST_DIRECTORY = "lastDirectory";
 
 
@@ -139,6 +144,7 @@ public class ControlPanel extends JPanel {
 
     private void buttonSetup() {
         // ボタンにイベントを追加
+        nextButton.setToolTipText(NEXT_B_DESCRIPTION);
         nextButton.addActionListener(new ActionListener(){
 
             @Override
@@ -151,6 +157,7 @@ public class ControlPanel extends JPanel {
 
         });
 
+        nextBreakButton.setToolTipText(NEXT_BB_DESCRIPTION);
         nextBreakButton.addActionListener(new ActionListener(){
 
             @Override
@@ -163,6 +170,7 @@ public class ControlPanel extends JPanel {
 
         });
 
+        nextAllButton.setToolTipText(NEXT_AB_DESCRIPTION);
         nextAllButton.addActionListener(new ActionListener(){
 
             @Override
@@ -176,6 +184,7 @@ public class ControlPanel extends JPanel {
 
         });
 
+        backButton.setToolTipText(BACK_B_DESCRIPTION);
         backButton.addActionListener(new ActionListener(){
 
             @Override
