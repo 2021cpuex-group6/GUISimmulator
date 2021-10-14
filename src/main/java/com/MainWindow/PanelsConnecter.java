@@ -18,8 +18,8 @@ public class PanelsConnecter {
         mainWindow.registersPanel.setRegister(forInteger, index, value, highlight);
     }
 
-    public int pcIncrement(){
-        return mainWindow.registersPanel.pcIncrement();
+    public int pcIncrement(int factor){
+        return mainWindow.registersPanel.pcIncrement(factor);
     }
 
     public int getPC(){
@@ -35,7 +35,7 @@ public class PanelsConnecter {
     }
 
     public void reset(){
-        
+
     }
 
 

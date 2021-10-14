@@ -123,10 +123,10 @@ public class RegistersPane extends JPanel{
         }
     }
 
-    public int pcIncrement(){
+    public int pcIncrement(int factor){
         // pcの値を増やし、画面に適用させ、増やした後のpcを返す
         int now = iRegisters.get(ConstantsClass.REGISTER_N).getFieldV();
-        now += ConstantsClass.INSTRUCTION_BYTE_N;
+        now += factor * ConstantsClass.INSTRUCTION_BYTE_N;
         iRegisters.get(ConstantsClass.REGISTER_N).setFieldV(now);
         return now;
 

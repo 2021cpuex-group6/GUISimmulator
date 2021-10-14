@@ -19,8 +19,10 @@ public class OuterProcessHandler {
     private final static String CHARA_CODE = "Shift-JIS";
     private final static String ERROR_CODE = "Error";
     private final static String BUG_REPORT = "バグと思われるので報告お願いします。";
-    private final static String INVALID_ARG_BUG = "バグ: 引数を間違えています";
-    private final static String ALREADY_END = "すでに終了しています。右クリックメニューからリセットをしてください(未実装)";
+    private final static String INVALID_ARG_BUG = "バグ: 引数を間違えています。";
+    private final static String ALREADY_END = "すでに終了しています。右クリックメニューからリセットをしてください(未実装)。";
+    private final static String NO_HISTORY = "これ以上戻れません。";
+    private final static String FILE_ENDED = "終了しました。";
 
     protected final static String COMMAND_DO_ALL = "a";
     protected final static String COMMAND_NEXT_BLOCK = "nb";
@@ -39,6 +41,7 @@ public class OuterProcessHandler {
     private final static String RES_ALREADY_END = "AEnd";
     private final static String RES_Stop = "Stop";
     private final static String RES_NO_CHANGE = "No";
+    private final static String RES_NO_HISTORY = "NoHis";
     
     private MainWindow mainWindow;
     private PrintStream sender; // プログラムに送る
@@ -115,7 +118,12 @@ public class OuterProcessHandler {
                 break;
             case DoNext:
                 res = receiveWithCheck();
-                checkRegChange(res);
+                checkEnd();
+                checkRegChange(res, false);
+                break;
+            case Back:
+                res = receiveWithCheck();
+                checkRegChange(res, true);
                 break;
             case Quit:
                 break;
@@ -125,20 +133,39 @@ public class OuterProcessHandler {
         }
     }
 
+    private void checkEnd() {
+        // nextでちょうど終了したとき、追加で End とくるので、それが来ていたら検知
+        try {
+            if(receiver.ready()){
+                if(receiver.readLine().startsWith(RES_END)){
+                    mainWindow.setMessage(FILE_ENDED);
+                }
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            ErrorChecker.errorCheck(e);
+        }
+    }
+
     public void shutdown(){
         // main.exe を終了する
         doSingleCommand(Command.Quit);
     }
 
-    private void checkRegChange(String res){
-        // 命令実行後、レジスタの変更を確認
-        int nowPC = mainWindow.connecter.getPC();
-        if(res.startsWith("AEnd")){
+    private void checkRegChange(String res, boolean back){
+        // 命令実行(順方向、逆方向)後、レジスタの変更を確認
+        int showInstructionPC =  mainWindow.connecter.getPC();
+        if(back) showInstructionPC -= ConstantsClass.INSTRUCTION_BYTE_N;
+        int factor = back ? -1 : 1;
+        if(res.startsWith(RES_ALREADY_END)){
             // 終了済み
             mainWindow.setMessage(ALREADY_END);
             return;
             
-        }else if(!res.startsWith(RES_NO_CHANGE)){
+        }else if(res.startsWith(RES_NO_HISTORY)){
+            mainWindow.setMessage(NO_HISTORY);
+            return;
+        } else if(!res.startsWith(RES_NO_CHANGE)){
             String resList[] = res.split(" ");
             int regInd = 0;
 
@@ -147,17 +174,18 @@ public class OuterProcessHandler {
             }else {
                 regInd = Integer.parseInt(resList[0].substring(1));
                 // pcが変更されてなければインクリメント
-                mainWindow.connecter.pcIncrement();
+
+                mainWindow.connecter.pcIncrement(factor);
 
             }
             mainWindow.connecter.setRegister(true, regInd, Integer.parseInt(resList[1]),
                         true);
                         
         }else{
-            mainWindow.connecter.pcIncrement();
+            mainWindow.connecter.pcIncrement(factor);
             mainWindow.connecter.clearHighlight();
         }
-        mainWindow.connecter.showNowInstruction(nowPC);
+        mainWindow.connecter.showNowInstruction(showInstructionPC);
     }
 
     private void readRegisters(){
