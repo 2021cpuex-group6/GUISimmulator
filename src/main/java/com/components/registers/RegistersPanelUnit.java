@@ -128,4 +128,8 @@ public class RegistersPanelUnit extends JPanel implements FocusListener{
         label.setBackground(Color.ORANGE);
         repaint();
     }
+
+    public int getFieldV(){
+        return fieldV;
+    }
 }

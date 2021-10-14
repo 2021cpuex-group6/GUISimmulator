@@ -112,6 +112,8 @@ public class MainWindow extends JFrame implements WindowListener{
         return panel;
 
     }
+    
+
 
     @Override
     public void windowOpened(WindowEvent e) {
@@ -121,6 +123,10 @@ public class MainWindow extends JFrame implements WindowListener{
 
     @Override
     public void windowClosing(WindowEvent e) {
+        if(processHandler != null){
+            processHandler.shutdown();
+            processHandler = null;
+        }
         Rectangle rec = this.getBounds();
         properties.setProperty(INIT_X, "" + rec.x);
         properties.setProperty(INIT_Y, "" + rec.y);

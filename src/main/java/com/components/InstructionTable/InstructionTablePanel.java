@@ -59,5 +59,12 @@ public class InstructionTablePanel extends JPanel{
         
 
     }
+
+    public void showNowInstruction(int PC){
+        // 現在の命令にスクロール、強調表示
+        int row = (PC - ConstantsClass.INSTRUCTION_START_ADDRESS) / ConstantsClass.INSTRUCTION_BYTE_N;
+        table.changeSelection(row, 1, false, false);
+        table.changeSelection(row, 1, false, true);
+    }
     
 }

@@ -122,4 +122,25 @@ public class RegistersPane extends JPanel{
             iRegisters.get(index).setFieldV(value);
         }
     }
+
+    public int pcIncrement(){
+        // pcの値を増やし、画面に適用させ、増やした後のpcを返す
+        int now = iRegisters.get(ConstantsClass.REGISTER_N).getFieldV();
+        now += ConstantsClass.INSTRUCTION_BYTE_N;
+        iRegisters.get(ConstantsClass.REGISTER_N).setFieldV(now);
+        return now;
+
+    }
+
+    public int getPC(){
+        return iRegisters.get(ConstantsClass.REGISTER_N).getFieldV();
+    }
+
+    public void clearHighlight(){
+        // highlight表示を消す（nopなどの実行の時）
+        if(highlightedReg != NON_REG_IND){
+            iRegisters.get(highlightedReg).setHighlighted(false);
+            highlightedReg = NON_REG_IND;
+        }
+    }
 }

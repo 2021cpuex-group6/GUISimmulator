@@ -98,9 +98,10 @@ public class OuterProcessHandler {
         }
         sendCommand(command.getCommand());
 
-        String res = receiveWithCheck();
+        String res;
         switch(command){
             case DoAll:
+                res  = receiveWithCheck();
                 if(res == RES_ALREADY_END){
                     // すでに終了済
                 }else{
@@ -108,7 +109,10 @@ public class OuterProcessHandler {
                 }
                 break;
             case DoNext:
+                res = receiveWithCheck();
                 checkRegChange(res);
+                break;
+            case Quit:
                 break;
                 
 
@@ -116,19 +120,37 @@ public class OuterProcessHandler {
         }
     }
 
+    public void shutdown(){
+        // main.exe を終了する
+        doSingleCommand(Command.Quit);
+    }
+
     private void checkRegChange(String res){
         // 命令実行後、レジスタの変更を確認
-        if(!res.startsWith(RES_NO_CHANGE)){
+        int nowPC = mainWindow.connecter.getPC();
+        if(res.startsWith("AEnd")){
+            // 終了済み
+            
+        }else if(!res.startsWith(RES_NO_CHANGE)){
             String resList[] = res.split(" ");
             int regInd = 0;
+
             if(resList[0].equals("pc")){
                 regInd = ConstantsClass.REGISTER_N;   
             }else {
                 regInd = Integer.parseInt(resList[0].substring(1));
+                // pcが変更されてなければインクリメント
+                mainWindow.connecter.pcIncrement();
+
             }
             mainWindow.connecter.setRegister(true, regInd, Integer.parseInt(resList[1]),
                         true);
+                        
+        }else{
+            mainWindow.connecter.pcIncrement();
+            mainWindow.connecter.clearHighlight();
         }
+        mainWindow.connecter.showNowInstruction(nowPC);
     }
 
     private void readRegisters(){

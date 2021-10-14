@@ -17,4 +17,22 @@ public class PanelsConnecter {
     public void setRegister(boolean forInteger, int index, int value, boolean highlight){
         mainWindow.registersPanel.setRegister(forInteger, index, value, highlight);
     }
+
+    public int pcIncrement(){
+        return mainWindow.registersPanel.pcIncrement();
+    }
+
+    public int getPC(){
+        return mainWindow.registersPanel.getPC();
+    }
+
+    public void showNowInstruction(int PC){
+        mainWindow.instructionPanel.showNowInstruction(PC);
+    }
+
+    public void clearHighlight(){
+        mainWindow.registersPanel.clearHighlight();
+    }
+
+
 }
