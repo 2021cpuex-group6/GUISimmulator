@@ -34,5 +34,9 @@ public class PanelsConnecter {
         mainWindow.registersPanel.clearHighlight();
     }
 
+    public void reset(){
+        
+    }
+
 
 }
