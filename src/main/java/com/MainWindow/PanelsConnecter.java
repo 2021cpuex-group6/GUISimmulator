@@ -13,4 +13,8 @@ public class PanelsConnecter {
         mainWindow.instructionPanel.setTable(path);
 
     }
+
+    public void setRegister(boolean forInteger, int index, int value, boolean highlight){
+        mainWindow.registersPanel.setRegister(forInteger, index, value, highlight);
+    }
 }

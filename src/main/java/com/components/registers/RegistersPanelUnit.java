@@ -125,5 +125,7 @@ public class RegistersPanelUnit extends JPanel implements FocusListener{
     public void setHighlighted(boolean bool){
         // 強調表示をするか
         label.setOpaque(bool);
+        label.setBackground(Color.ORANGE);
+        repaint();
     }
 }

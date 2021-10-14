@@ -18,6 +18,8 @@ import javax.swing.JPanel;
 
 import com.MainWindow.MainWindow;
 import com.MainWindow.PropertiesClass;
+import com.outerProcess.Command;
+import com.outerProcess.OuterProcessHandler;
 
 public class ControlPanel extends JPanel {
     final static int BUTTON_N = 4;
@@ -117,8 +119,10 @@ public class ControlPanel extends JPanel {
                     opendFile = chooser.getSelectedFile();
                     property.setProperty(LAST_DIRECTORY, opendFile.getParent());
                     PropertiesClass.setProperties(property);
-                    fileLabel.setText(opendFile.getPath());
-                    mainWindow.connecter.instructionFileSet(opendFile.getPath());
+                    String filePath = opendFile.getPath();
+                    fileLabel.setText(filePath);
+                    mainWindow.connecter.instructionFileSet(filePath);
+                    mainWindow.processHandler = new OuterProcessHandler(mainWindow, filePath);
 
                 }
                 
@@ -140,7 +144,9 @@ public class ControlPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // TODO Auto-generated method stub
-                
+                if(mainWindow.processHandler != null){
+                    mainWindow.processHandler.doSingleCommand(Command.DoNext);
+                }
             }
 
         });
@@ -150,7 +156,9 @@ public class ControlPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // TODO Auto-generated method stub
-                
+                if(mainWindow.processHandler != null){
+                    mainWindow.processHandler.doSingleCommand(Command.DoNextBreak);
+                }
             }
 
         });
@@ -160,6 +168,9 @@ public class ControlPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // TODO Auto-generated method stub
+                if(mainWindow.processHandler != null){
+                    mainWindow.processHandler.doSingleCommand(Command.DoAll);     
+                }
                 
             }
 
@@ -170,6 +181,9 @@ public class ControlPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // TODO Auto-generated method stub
+                if(mainWindow.processHandler != null){
+                    mainWindow.processHandler.doSingleCommand(Command.Back);
+                }
                 
             }
 

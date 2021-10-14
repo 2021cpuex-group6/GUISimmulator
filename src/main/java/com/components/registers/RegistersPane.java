@@ -16,20 +16,21 @@ public class RegistersPane extends JPanel{
 
     private final static int REGISTERS_COL_N = 1;
     private final static int REGISTERS_ROW_N = 32;
+    private final static int NON_REG_IND = -1; // 該当するレジスタが存在しないときのインデックス
 
 
 
     private ArrayList<RegistersPanelUnit> iRegisters;
     private ArrayList<RegistersPanelUnit> fRegisters;
-    private RegistersPanelUnit pc;
-    private RegistersPanelUnit fcsr;
     private JPanel iPanel;
     private JPanel fPanel;
+    private int highlightedReg;
 
     public RegistersPane(){
         super();
-        iRegisters = new ArrayList<>(ConstantsClass.REGISTER_N);
-        fRegisters = new ArrayList<>(ConstantsClass.REGISTER_N);
+        highlightedReg = NON_REG_IND;
+        iRegisters = new ArrayList<>(ConstantsClass.REGISTER_N+1);
+        fRegisters = new ArrayList<>(ConstantsClass.REGISTER_N+1);
         iPanel = getIPanel();
         fPanel = getFPanel();
         JScrollPane scrollPane = new JScrollPane();
@@ -53,7 +54,7 @@ public class RegistersPane extends JPanel{
         // panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         JPanel innerPanel = new JPanel();
         innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.Y_AXIS));
-        pc = new RegistersPanelUnit("  pc", "0");
+        RegistersPanelUnit pc = new RegistersPanelUnit("  pc", "0");
         innerPanel.add(pc);
         innerPanel.add(Box.createVerticalStrut(ConstantsClass.SEPARATE_INTERVAL));
         innerPanel.add(new JSeparator());
@@ -69,6 +70,7 @@ public class RegistersPane extends JPanel{
             iRegisters.add(register);
             registersPanel.add(register);
         }
+        iRegisters.add(pc); // 32番目のレジスタとしてもpcをセット
 
         innerPanel.add(registersPanel);
         panel.add(innerPanel);
@@ -80,7 +82,7 @@ public class RegistersPane extends JPanel{
         JPanel panel = new JPanel();
         JPanel innerPanel = new JPanel();
         innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.Y_AXIS));
-        fcsr = new RegistersPanelUnit("fcsr", "0");
+        RegistersPanelUnit fcsr = new RegistersPanelUnit("fcsr", "0");
         innerPanel.add(fcsr);
         innerPanel.add(Box.createVerticalStrut(ConstantsClass.SEPARATE_INTERVAL));
         innerPanel.add(new JSeparator());
@@ -96,6 +98,7 @@ public class RegistersPane extends JPanel{
             fRegisters.add(register);
             registersPanel.add(register);
         }
+        fRegisters.add(fcsr); // fcsrも同様
 
         innerPanel.add(registersPanel);
         panel.add(innerPanel);
@@ -103,15 +106,20 @@ public class RegistersPane extends JPanel{
         return panel;
     }
 
-    public void setRegister(boolean forInteger, int index, int value){
+    public void setRegister(boolean forInteger, int index, int value, boolean highlight){
         // レジスタに値をセット
         // forInteger ... 整数レジスタへセットするならtrue, 浮動小数点レジスタならfalse
+        if(highlightedReg != NON_REG_IND){
+            iRegisters.get(highlightedReg).setHighlighted(false);
+            highlightedReg = NON_REG_IND;
+        }
+        if(highlight){
+            iRegisters.get(index).setHighlighted(true);
+            highlightedReg = index;
+        }
+
         if(forInteger){
-            if(index == ConstantsClass.REGISTER_N){
-                pc.setFieldV(value);
-            }else{
-                iRegisters.get(index).setFieldV(value);
-            }
+            iRegisters.get(index).setFieldV(value);
         }
     }
 }

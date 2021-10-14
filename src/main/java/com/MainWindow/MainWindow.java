@@ -22,6 +22,7 @@ import javax.swing.border.BevelBorder;
 import com.components.Controls.ControlPanel;
 import com.components.InstructionTable.InstructionTablePanel;
 import com.components.registers.RegistersPane;
+import com.outerProcess.OuterProcessHandler;
 
 public class MainWindow extends JFrame implements WindowListener{
     private final static int GRID_W = 5;
@@ -41,6 +42,7 @@ public class MainWindow extends JFrame implements WindowListener{
     protected ControlPanel controlPanel;
     private GridBagLayout layout;
 
+    public OuterProcessHandler processHandler;
     public PanelsConnecter connecter;
 
     public MainWindow(Properties properties){
@@ -48,6 +50,7 @@ public class MainWindow extends JFrame implements WindowListener{
         connecter = new PanelsConnecter(this);
         setTitle(TITLE);
         this.properties = properties;
+        this.processHandler = null;
         setBounds(Integer.parseInt(properties.getProperty(INIT_X)), Integer.parseInt(properties.getProperty(INIT_Y)),
         Integer.parseInt(properties.getProperty(INIT_W)), Integer.parseInt(properties.getProperty(INIT_H)));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
