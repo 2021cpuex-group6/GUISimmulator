@@ -20,7 +20,7 @@ public class OuterProcessHandler {
     private final static String ERROR_CODE = "Error";
     private final static String BUG_REPORT = "バグと思われるので報告お願いします。";
     private final static String INVALID_ARG_BUG = "バグ: 引数を間違えています";
-    private final static String ALREADY_END = "すでに終了しています。右クリックメニューからリセットをしてください";
+    private final static String ALREADY_END = "すでに終了しています。右クリックメニューからリセットをしてください(未実装)";
 
     protected final static String COMMAND_DO_ALL = "a";
     protected final static String COMMAND_NEXT_BLOCK = "nb";
