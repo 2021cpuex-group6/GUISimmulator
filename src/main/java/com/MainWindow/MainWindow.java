@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.BorderLayout;
@@ -105,14 +106,19 @@ public class MainWindow extends JFrame implements WindowListener{
         panel.setLayout(new FlowLayout(FlowLayout.LEFT));
         panel.setBorder(new BevelBorder(BevelBorder.LOWERED));
 
-        JLabel message = new JLabel("test");
-        message.setFont(new Font(Font.DIALOG_INPUT, Font.PLAIN, 15));
-        panel.add(message);
+        messageLabel = new JLabel("test");
+        messageLabel.setFont(new Font(Font.DIALOG_INPUT, Font.PLAIN, 15));
+        panel.add(messageLabel);
 
         return panel;
 
     }
     
+    public void setMessage(String text){
+        messageLabel.setText(text);
+        Toolkit.getDefaultToolkit().beep();
+
+    }
 
 
     @Override

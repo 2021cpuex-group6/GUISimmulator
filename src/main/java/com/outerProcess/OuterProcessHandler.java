@@ -20,6 +20,7 @@ public class OuterProcessHandler {
     private final static String ERROR_CODE = "Error";
     private final static String BUG_REPORT = "バグと思われるので報告お願いします。";
     private final static String INVALID_ARG_BUG = "バグ: 引数を間違えています";
+    private final static String ALREADY_END = "すでに終了しています。右クリックメニューからリセットをしてください";
 
     protected final static String COMMAND_DO_ALL = "a";
     protected final static String COMMAND_NEXT_BLOCK = "nb";
@@ -102,10 +103,14 @@ public class OuterProcessHandler {
         switch(command){
             case DoAll:
                 res  = receiveWithCheck();
-                if(res == RES_ALREADY_END){
+                if(res.startsWith(RES_ALREADY_END)){
                     // すでに終了済
+                    mainWindow.setMessage(ALREADY_END);
+                    return;
                 }else{
                     readRegisters();
+                    int nowPC = mainWindow.connecter.getPC();
+                    mainWindow.connecter.showNowInstruction(nowPC-ConstantsClass.INSTRUCTION_BYTE_N);
                 }
                 break;
             case DoNext:
@@ -130,6 +135,8 @@ public class OuterProcessHandler {
         int nowPC = mainWindow.connecter.getPC();
         if(res.startsWith("AEnd")){
             // 終了済み
+            mainWindow.setMessage(ALREADY_END);
+            return;
             
         }else if(!res.startsWith(RES_NO_CHANGE)){
             String resList[] = res.split(" ");
