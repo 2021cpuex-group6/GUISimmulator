@@ -62,7 +62,7 @@ public class MainWindow extends JFrame implements WindowListener{
 
         mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
-        registersPanel = new RegistersPane();
+        registersPanel = new RegistersPane(this);
         JPanel centerPanel = getCenterPanel();
         mainPanel.add(registersPanel);
         mainPanel.add(centerPanel);

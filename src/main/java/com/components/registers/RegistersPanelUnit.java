@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.MainWindow.MainWindow;
 import com.utils.BaseNumber;
 import com.utils.IntegerInputVerifier;
 
@@ -26,11 +27,18 @@ public class RegistersPanelUnit extends JPanel implements FocusListener{
     private int fieldV;
     private BaseNumber base;
     private boolean signed;
+    private int index; // 何番目のレジスタに対応するか
+    private boolean forInteger; // 整数レジスタか、浮動小数点レジスタか
+    private MainWindow mainWindow;
 
-    public RegistersPanelUnit(String name, String initV){
+    public RegistersPanelUnit(String name, String initV, int index, boolean forInteger, MainWindow mainWindow){
         super();
+        this.mainWindow = mainWindow;
         base = BaseNumber.DEC;
         signed = true;
+        this.index = index;
+        this.forInteger = forInteger;
+        this.mainWindow = mainWindow;
         
 
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -46,6 +54,9 @@ public class RegistersPanelUnit extends JPanel implements FocusListener{
         fieldV = Integer.parseInt(initV);
         field.setInputVerifier(new IntegerInputVerifier());
         field.addFocusListener(this);
+        if(index == 0 && forInteger){
+            field.setEditable(false);
+        }
 
         add(label);
         add(field);
@@ -64,6 +75,9 @@ public class RegistersPanelUnit extends JPanel implements FocusListener{
     public void focusLost(FocusEvent e) {
         // TODO Auto-generated method stub
         fieldV = fieldParse(field.getText());
+        if(mainWindow.processHandler != null){
+            mainWindow.processHandler.writeRegister(index, forInteger, fieldV);
+        }
         
         
     }

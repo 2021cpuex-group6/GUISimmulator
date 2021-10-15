@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 
+import com.MainWindow.MainWindow;
 import com.utils.BaseNumber;
 import com.utils.ConstantsClass;
 
@@ -26,9 +27,11 @@ public class RegistersPane extends JPanel{
     private JPanel iPanel;
     private JPanel fPanel;
     private int highlightedReg;
+    private MainWindow mainWindow;
 
-    public RegistersPane(){
+    public RegistersPane(MainWindow mainWindow){
         super();
+        this.mainWindow = mainWindow;
         highlightedReg = NON_REG_IND;
         iRegisters = new ArrayList<>(ConstantsClass.REGISTER_N+1);
         fRegisters = new ArrayList<>(ConstantsClass.REGISTER_N+1);
@@ -55,7 +58,7 @@ public class RegistersPane extends JPanel{
         // panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         JPanel innerPanel = new JPanel();
         innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.Y_AXIS));
-        RegistersPanelUnit pc = new RegistersPanelUnit("  pc", "0");
+        RegistersPanelUnit pc = new RegistersPanelUnit("  pc", "0", ConstantsClass.REGISTER_N, true, mainWindow);
         innerPanel.add(pc);
         innerPanel.add(Box.createVerticalStrut(ConstantsClass.SEPARATE_INTERVAL));
         innerPanel.add(new JSeparator());
@@ -67,7 +70,7 @@ public class RegistersPane extends JPanel{
         
         for (int i = 0; i < ConstantsClass.REGISTER_N; i++) {
             String name = String.format("x%02d ", i);
-            RegistersPanelUnit register = new RegistersPanelUnit(name, "0");
+            RegistersPanelUnit register = new RegistersPanelUnit(name, "0", i, true, mainWindow);
             iRegisters.add(register);
             registersPanel.add(register);
         }
@@ -83,7 +86,7 @@ public class RegistersPane extends JPanel{
         JPanel panel = new JPanel();
         JPanel innerPanel = new JPanel();
         innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.Y_AXIS));
-        RegistersPanelUnit fcsr = new RegistersPanelUnit("fcsr", "0");
+        RegistersPanelUnit fcsr = new RegistersPanelUnit("fcsr", "0", ConstantsClass.REGISTER_N, false, mainWindow);
         innerPanel.add(fcsr);
         innerPanel.add(Box.createVerticalStrut(ConstantsClass.SEPARATE_INTERVAL));
         innerPanel.add(new JSeparator());
@@ -95,7 +98,7 @@ public class RegistersPane extends JPanel{
         
         for (int i = 0; i < ConstantsClass.REGISTER_N; i++) {
             String name = String.format("f%02d ", i);
-            RegistersPanelUnit register = new RegistersPanelUnit(name, "0");
+            RegistersPanelUnit register = new RegistersPanelUnit(name, "0", i, false, mainWindow);
             fRegisters.add(register);
             registersPanel.add(register);
         }

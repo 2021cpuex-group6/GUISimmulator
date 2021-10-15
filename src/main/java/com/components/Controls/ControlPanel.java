@@ -143,6 +143,9 @@ public class ControlPanel extends JPanel {
                     String filePath = opendFile.getPath();
                     fileLabel.setText(filePath);
                     mainWindow.connecter.instructionFileSet(filePath);
+                    if(mainWindow.processHandler != null){
+                        mainWindow.processHandler.shutdown();
+                    }
                     mainWindow.processHandler = new OuterProcessHandler(mainWindow, filePath);
 
                 }

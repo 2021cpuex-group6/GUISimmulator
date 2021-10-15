@@ -126,6 +126,7 @@ public class OuterProcessHandler {
                 checkRegChange(res, true);
                 break;
             case Quit:
+                resErrorCheck();
                 break;
                 
 
@@ -139,6 +140,7 @@ public class OuterProcessHandler {
             if(receiver.ready()){
                 if(receiver.readLine().startsWith(RES_END)){
                     mainWindow.setMessage(FILE_ENDED);
+                    
                 }
             }
         } catch (IOException e) {
@@ -150,6 +152,50 @@ public class OuterProcessHandler {
     public void shutdown(){
         // main.exe を終了する
         doSingleCommand(Command.Quit);
+    }
+
+    public void writeRegister(int index, boolean forInteger, int value){
+        String targetReg = "";
+        if(forInteger){
+            if(index == ConstantsClass.REGISTER_N){
+                targetReg = "pc";
+            }else{
+                targetReg = ConstantsClass.INTEGER_REGISTER_PREFIX+String.format("%02d", index);
+            }
+        }else{
+            return;
+        }
+        String message = COMMAND_REG_WRITE + " " + targetReg +" "  +value;
+        sendCommand(message);
+        resErrorCheck();
+
+    }
+
+    private void resErrorCheck(){
+        // 正常なら何も返されないときにエラーかどうかを調べる
+        try {
+            if(receiver.ready()){
+                if(receiver.readLine().startsWith(ERROR_CODE)){
+                    String message = ERROR_CODE;
+                    int lineN = Integer.parseInt(receiver.readLine());
+                    if(lineN >= 0){
+                        message += System.lineSeparator() + String.format("%d行目", lineN);
+                    }
+                    message += System.lineSeparator() + receiver.readLine();
+                    if(lineN <= 0){
+                        message += System.lineSeparator() + BUG_REPORT;
+                    }
+                    JFrame frame = new JFrame();
+    
+                    JOptionPane.showMessageDialog(frame, message);
+                    process.destroy();
+                    System.exit(-1);
+                }
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            ErrorChecker.errorCheck(e);
+        }
     }
 
     private void checkRegChange(String res, boolean back){
@@ -207,4 +253,6 @@ public class OuterProcessHandler {
         }
 
     }
+
+    
 }
