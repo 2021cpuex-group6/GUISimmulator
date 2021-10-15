@@ -9,22 +9,26 @@ import java.io.File;
 import java.util.Properties;
 import java.awt.GridLayout;
 
+import javax.swing.AbstractButton;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 
 import com.MainWindow.MainWindow;
 import com.MainWindow.PropertiesClass;
 import com.outerProcess.Command;
 import com.outerProcess.OuterProcessHandler;
+import com.utils.BaseNumber;
 
 public class ControlPanel extends JPanel {
     final static int BUTTON_N = 4;
     final static int PANEL_W = 400;
-    final static int PANEL_H = 60;
+    final static int PANEL_H = 90;
 
     final static int BUTTON_W = 50;
     final static int BUTTON_H = 30;
@@ -35,6 +39,12 @@ public class ControlPanel extends JPanel {
     private static final String NEXT_BB_TEXT = ">|";
     private static final String NEXT_BA_TEXT = ">>";
     private static final String BACK_B_TEXT = "<";
+
+    private final static String HEX_RADIO = "HEX";
+    private final static String DEC_RADIO = "DEC";
+    private final static String OCT_RADIO = "OCT";
+    private final static String BIN_RADIO = "BIN";
+    private final static String UNSIGNED_RADIO = "UNSIGNED";
 
     private static final String NEXT_B_DESCRIPTION = "次の命令を実行";
     private static final String NEXT_BB_DESCRIPTION = "次のブレークポイントまでを実行(未実装)";
@@ -50,6 +60,12 @@ public class ControlPanel extends JPanel {
     private JButton backButton;
     private JPanel controlPanel;
     private JLabel fileLabel;
+
+    private JRadioButton hex = new JRadioButton(HEX_RADIO);
+    private JRadioButton dec = new JRadioButton(DEC_RADIO);
+    private JRadioButton oct = new JRadioButton(OCT_RADIO);
+    private JRadioButton bin = new JRadioButton(BIN_RADIO);
+    private JRadioButton unsigned = new JRadioButton(UNSIGNED_RADIO);
 
     private File opendFile;
     private Properties property;
@@ -86,7 +102,7 @@ public class ControlPanel extends JPanel {
         JPanel outerPanel = new JPanel(new BorderLayout());
 
         outerPanel.add(innerPanel, BorderLayout.NORTH);
-        outerPanel.add(Box.createVerticalStrut(BUTTON_H/2), BorderLayout.CENTER);
+        outerPanel.add(getRadioPanel());
         outerPanel.add(getFilePanel(), BorderLayout.SOUTH);
 
         add(Box.createHorizontalStrut(BUTTON_H/4), BorderLayout.NORTH);
@@ -140,6 +156,71 @@ public class ControlPanel extends JPanel {
         panel.add(fileLabel);
 
         return panel;
+    }
+
+    private JPanel getRadioPanel(){
+        // ラジオボタンを集めたパネルを作る
+        JPanel panel = new JPanel(new GridLayout(1, 5));
+        ButtonGroup bgroup = new ButtonGroup();
+
+        hex = new JRadioButton(HEX_RADIO);
+        dec = new JRadioButton(DEC_RADIO);
+        oct = new JRadioButton(OCT_RADIO);
+        bin = new JRadioButton(BIN_RADIO);
+        unsigned = new JRadioButton(UNSIGNED_RADIO);
+
+        bgroup.add(hex);
+        bgroup.add(dec);
+        bgroup.add(oct);
+        bgroup.add(bin);
+        bgroup.add(unsigned);
+
+        panel.add(hex);
+        panel.add(dec);
+        panel.add(oct);
+        panel.add(bin);
+        panel.add(unsigned);
+
+        dec.setSelected(true);
+
+        ActionListener radioListener = new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO Auto-generated method stub
+                JRadioButton button = (JRadioButton) e.getSource();
+                if(button == hex){
+                    mainWindow.connecter.changeBase(BaseNumber.HEX, false);
+                }else if(button == dec){
+                    mainWindow.connecter.changeBase(BaseNumber.DEC, true);
+                }else if(button == oct){
+                    mainWindow.connecter.changeBase(BaseNumber.OCT, false);
+                }else if(button == bin){
+                    mainWindow.connecter.changeBase(BaseNumber.BIN, false);
+                }else{
+                    mainWindow.connecter.changeBase(BaseNumber.DEC, false);
+                }
+
+            }
+
+        };
+
+        hex.addActionListener(radioListener);
+        bin.addActionListener(radioListener);
+        oct.addActionListener(radioListener);
+        dec.addActionListener(radioListener);
+        unsigned.addActionListener(radioListener);
+
+        JPanel outerPanel = new JPanel(new BorderLayout());
+        outerPanel.add(Box.createVerticalStrut(BUTTON_H/4), BorderLayout.NORTH);
+        outerPanel.add(panel);
+        outerPanel.add(Box.createVerticalStrut(BUTTON_H/4), BorderLayout.SOUTH);
+
+        outerPanel.setMinimumSize(new Dimension(PANEL_W/2, BUTTON_H));
+
+        return outerPanel;
+
+
     }
 
     private void buttonSetup() {

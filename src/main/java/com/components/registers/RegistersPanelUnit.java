@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.Collections;
+
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -13,7 +15,12 @@ import com.utils.BaseNumber;
 import com.utils.IntegerInputVerifier;
 
 public class RegistersPanelUnit extends JPanel implements FocusListener{
-    final static int FIELD_W = 10;
+    private final static int FIELD_W = 10;
+    private final static int FIELD_W_BIN = 25;
+    private final static int HEX_LEN = 8;
+    private final static int BIN_LEN = 32;
+    private final static int OCT_LEN = 11;
+
     private JLabel label;
     private JTextField field;
     private int fieldV;
@@ -87,12 +94,20 @@ public class RegistersPanelUnit extends JPanel implements FocusListener{
     private void refreshFieldString(){
         // 表示を設定の進法、符号有無で更新する
         String setValue = "";
+        String value;
+        String zeros;
         switch(base){
             case BIN:
-                setValue = "0b" + Integer.toUnsignedString(fieldV, 2);
+                value = Integer.toUnsignedString(fieldV, 2);
+                zeros = String.join("", Collections.nCopies(BIN_LEN - value.length(), "0"));
+                setValue = "0b" + zeros + value;
+                field.setColumns(FIELD_W_BIN);
                 break;
             case OCT:
-                setValue = "0o" + Integer.toUnsignedString(fieldV, 8);
+                value = Integer.toUnsignedString(fieldV, 8);
+                zeros = String.join("", Collections.nCopies(OCT_LEN - value.length(), "0"));
+                setValue = "0o" + zeros + value;
+                field.setColumns(FIELD_W);
                 break;
             case DEC:
                 if(signed){
@@ -100,11 +115,17 @@ public class RegistersPanelUnit extends JPanel implements FocusListener{
                 }else{
                     setValue = Integer.toUnsignedString(fieldV);
                 }
+                field.setColumns(FIELD_W);
                 break;
             case HEX:
-                setValue = "0x" + Integer.toUnsignedString(fieldV, 16);
+                value = Integer.toUnsignedString(fieldV, 16);
+                zeros = String.join("", Collections.nCopies(HEX_LEN - value.length(), "0"));
+                setValue = "0x" + zeros + value;
+                field.setColumns(FIELD_W);
                 break;
-        }
+            }
+            revalidate();
+            repaint();
         field.setText(setValue);
         return;
     }

@@ -1,5 +1,7 @@
 package com.MainWindow;
 
+import com.utils.BaseNumber;
+
 public class PanelsConnecter {
     //パネル間でデータの受け渡しなどがあるときに仲介する
     private MainWindow mainWindow;
@@ -36,6 +38,10 @@ public class PanelsConnecter {
 
     public void reset(){
 
+    }
+
+    public void changeBase(BaseNumber base, boolean signed){
+        mainWindow.registersPanel.changeBase(base, signed);
     }
 
 

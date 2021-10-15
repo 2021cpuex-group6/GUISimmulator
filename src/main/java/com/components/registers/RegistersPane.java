@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 
+import com.utils.BaseNumber;
 import com.utils.ConstantsClass;
 
 public class RegistersPane extends JPanel{
@@ -141,6 +142,14 @@ public class RegistersPane extends JPanel{
         if(highlightedReg != NON_REG_IND){
             iRegisters.get(highlightedReg).setHighlighted(false);
             highlightedReg = NON_REG_IND;
+        }
+    }
+
+    public void changeBase(BaseNumber base, boolean signed){
+        for (int i = 0; i < ConstantsClass.REGISTER_N+1; i++) {
+            iRegisters.get(i).changeBase(base, signed);
+            fRegisters.get(i).changeBase(base, signed);
+
         }
     }
 }
