@@ -1,6 +1,6 @@
 # CPUシミュレータ(GUI) Ver1.1
 
-[ダウンロード (Windows)](https://github.com/2021cpuex-group6/GUISimmulator/releases/tag/V1.1)
+[ダウンロード (Windows)](https://github.com/2021cpuex-group6/GUISimmulator/releases/tag/V1.11)
 
 ## 使い方
 
