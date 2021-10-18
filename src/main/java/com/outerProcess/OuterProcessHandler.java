@@ -51,7 +51,7 @@ public class OuterProcessHandler {
         // 開くアセンブリファイル (or バイナリコード)を指定してプロセスを起動する
         this.mainWindow = main;
         try {
-            process = Runtime.getRuntime().exec(SIMMULATOR_EXE + " "+ path + " -g");
+            process = Runtime.getRuntime().exec(SIMMULATOR_EXE + " \""+ path + "\" -g");
             sender = new PrintStream(process.getOutputStream());
             receiver = new BufferedReader(new InputStreamReader(process.getInputStream(), CHARA_CODE));
         } catch (IOException e) {
