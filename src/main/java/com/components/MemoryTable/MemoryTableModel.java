@@ -13,6 +13,8 @@ public class MemoryTableModel extends DefaultTableModel{
     final static int MEMORY_COLUMN_N = 16;
     final static int MEMORY_COLUMN_SPLIT_N = 4;
 
+    private Vector<Vector<Byte>> memory;
+
 
     
     public MemoryTableModel(){
@@ -26,6 +28,7 @@ public class MemoryTableModel extends DefaultTableModel{
 
     public MemoryTableModel(Vector<Vector<Byte>> vector){
         super();
+        memory = vector;
 
         addColumn(ADDRESS_COLUMN);
         for (int i = 0; i < MEMORY_COLUMN_N; i++) {
