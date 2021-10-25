@@ -9,5 +9,5 @@ public class ConstantsClass {
 
     public final static int REGISTER_KINDS = 4; // レジスタの種別
     public final static String INTEGER_REGISTER_PREFIX = "x";
-    
+    public final static int MEMORY_BYTE_N = 0x1000; //2^12バイト 
 }
