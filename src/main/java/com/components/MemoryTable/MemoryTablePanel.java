@@ -26,6 +26,9 @@ public class MemoryTablePanel extends JPanel{
     private MemoryTableModel model;
     private JTable table;
 
+    private int highlightedRow = -1;
+    private int highlightedColumn = -1;
+
 
     public MemoryTablePanel(){
         super();
@@ -85,8 +88,39 @@ public class MemoryTablePanel extends JPanel{
 
     }
 
+    public long getNowStartAddress(){
+        // 現在表示している部分で一番若いアドレスを返す
+        return model.startAddress;
+    }
+
+    public void setNowStartAddress(long address){
+        model.startAddress = address;
+    }
+
+    public boolean inPrintedRange(long address){
+        // 現在表示している領域にアドレスが含まれるか
+        return getNowStartAddress() <= address && address < getNowStartAddress() + ConstantsClass.MEMORY_SHOW_LINE_N * ConstantsClass.MEMORY_COLUMN_N;
+    }
+
+    public void setHighlight(long address){
+        // 強調表示
+
+    }
+
+    public void setByte(long address, byte value){
+        if(!inPrintedRange(address)){
+            return;
+        }
+        int rowInd = (int)((address - getNowStartAddress()) / ConstantsClass.MEMORY_COLUMN_N);
+        int columnInd = (int)((address - getNowStartAddress()) % ConstantsClass.MEMORY_COLUMN_N);
+        table.setValueAt(value, rowInd, columnInd + 1);
+
+    }
+
+
+
     public void showNowInstruction(int address){
-        // 現在の命令にスクロール、強調表示
+        // 現在のメモリにスクロール
         // int row = (PC - ConstantsClass.INSTRUCTION_START_ADDRESS) / ConstantsClass.INSTRUCTION_BYTE_N;
         // table.changeSelection(row, 1, false, false);
         // table.changeSelection(row, 1, false, true);

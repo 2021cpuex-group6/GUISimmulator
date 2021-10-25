@@ -15,7 +15,7 @@ public class MemoryTableModel extends DefaultTableModel{
 
     final static int MEMORY_COLUMN_SPLIT_N = 4;
 
-    public int startAddress = 0; //先頭アドレス
+    public long startAddress = 0; //先頭アドレス
     private Vector<Vector<Byte>> memory;
 
 
