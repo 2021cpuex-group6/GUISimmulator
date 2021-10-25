@@ -23,7 +23,6 @@ public class MemoryTableModel extends DefaultTableModel{
         for (int i = 0; i < MEMORY_COLUMN_N; i++) {
             addColumn(String.format(MEMORY_FORMAT, i));
         }
-
     }
 
     public MemoryTableModel(Vector<Vector<Byte>> vector){

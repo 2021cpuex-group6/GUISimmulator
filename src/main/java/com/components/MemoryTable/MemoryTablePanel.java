@@ -29,8 +29,16 @@ public class MemoryTablePanel extends JPanel{
 
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.getVerticalScrollBar().setUnitIncrement(ConstantsClass.SCROLL_INCREMENT);
-        
-        model = new MemoryTableModel();
+
+        // test
+        Vector<Vector<Byte>> test = new Vector<>();
+        for (Byte i = 0; i < MemoryTableModel.MEMORY_COLUMN_N; i++) {
+            Vector<Byte> tes = new Vector<>();
+            tes.add(i);
+            test.add(tes);
+        }
+
+        model = new MemoryTableModel(test);
         table = new JTable(model);
         tableSetting();
         scrollPane.setViewportView(table);
