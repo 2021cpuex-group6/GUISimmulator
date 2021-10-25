@@ -1,6 +1,8 @@
 package com.components.MemoryTable;
 
 import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -32,17 +34,8 @@ public class MemoryTablePanel extends JPanel{
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.getVerticalScrollBar().setUnitIncrement(ConstantsClass.SCROLL_INCREMENT);
 
-        // test
-        Vector<Vector<Byte>> test = new Vector<>();
-        for (Byte i = 0; i < MemoryTableModel.MEMORY_COLUMN_N; i++) {
-            Vector<Byte> tes = new Vector<>();
-            tes.add(i);
-            tes.add((byte)(i + 8));
-            tes.add((byte)(i + 16));
-            test.add(tes);
-        }
-
-        model = new MemoryTableModel(test);
+        
+        model = new MemoryTableModel(getInitTableData());
         table = new JTable(model);
         table.setShowVerticalLines(false);
         table.setShowHorizontalLines(false);
@@ -61,6 +54,19 @@ public class MemoryTablePanel extends JPanel{
 
     }
 
+    private Vector<Vector<Byte>> getInitTableData(){
+        // 特に初期データがないとき
+        Vector<Vector<Byte>> data = new Vector<>();
+        for (int i = 0; i < ConstantsClass.MEMORY_COLUMN_N; i++) {
+            Vector<Byte> innerData = new Vector<Byte>(ConstantsClass.MEMORY_SHOW_LINE_N);
+            for (int j = 0; j < ConstantsClass.MEMORY_SHOW_LINE_N; j++) {
+                innerData.add((byte) 0);
+            }
+            data.add(innerData);
+        }
+        return data;
+    }
+
     public void setTable(Vector<Vector<Byte>> data){
         // メモリの初期データを受け取って表示
         model = new MemoryTableModel(data);
@@ -72,7 +78,7 @@ public class MemoryTablePanel extends JPanel{
         // 表の設定
         DefaultTableColumnModel columnModel = (DefaultTableColumnModel) table.getColumnModel();
         columnModel.getColumn(0).setMaxWidth(ADDRESS_C_WIDTH);
-        for (int i = 0; i < MemoryTableModel.MEMORY_COLUMN_N; i++) {
+        for (int i = 0; i < ConstantsClass.MEMORY_COLUMN_N; i++) {
             columnModel.getColumn(i+1).setMaxWidth(MEMORY_C_WIDTH);            
         }
         

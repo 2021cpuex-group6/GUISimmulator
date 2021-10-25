@@ -7,6 +7,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import com.utils.ConstantsClass;
+
 class MemoryTableCellRenderer extends DefaultTableCellRenderer {
 
     private final static int BORDERWIDTH1 = 1;
@@ -40,7 +42,7 @@ class MemoryTableCellRenderer extends DefaultTableCellRenderer {
         if (column == 0) {
             //アドレス表示
             setHorizontalAlignment(SwingConstants.RIGHT);
-            this.setText(String.format(ADDRESS_FORMAT, model.startAddress + row * MemoryTableModel.MEMORY_COLUMN_N));
+            this.setText(String.format(ADDRESS_FORMAT, model.startAddress + row * ConstantsClass.MEMORY_COLUMN_N));
         }else{
             setHorizontalAlignment(SwingConstants.CENTER);
             this.setText(String.format(MEMORY_FORMAT, table.getValueAt(row, column)));

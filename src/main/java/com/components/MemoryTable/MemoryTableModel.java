@@ -4,13 +4,15 @@ import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
 
+import com.utils.ConstantsClass;
+
 
 public class MemoryTableModel extends DefaultTableModel{
 
     final static String ADDRESS_COLUMN = "Address";
     
     final static String MEMORY_FORMAT = "%02x";
-    final static int MEMORY_COLUMN_N = 8;
+
     final static int MEMORY_COLUMN_SPLIT_N = 4;
 
     public int startAddress = 0; //先頭アドレス
@@ -21,7 +23,7 @@ public class MemoryTableModel extends DefaultTableModel{
     public MemoryTableModel(){
         super();
         addColumn(ADDRESS_COLUMN);
-        for (int i = 0; i < MEMORY_COLUMN_N; i++) {
+        for (int i = 0; i < ConstantsClass.MEMORY_COLUMN_N; i++) {
             addColumn(String.format(MEMORY_FORMAT, i));
         }
     }
@@ -31,7 +33,7 @@ public class MemoryTableModel extends DefaultTableModel{
         memory = vector;
 
         addColumn(ADDRESS_COLUMN);
-        for (int i = 0; i < MEMORY_COLUMN_N; i++) {
+        for (int i = 0; i < ConstantsClass.MEMORY_COLUMN_N; i++) {
             addColumn(String.format(MEMORY_FORMAT, i), vector.get(i));
         }
 
