@@ -41,7 +41,7 @@ public class MemoryTableModel extends DefaultTableModel{
     public Class<?> getColumnClass(int column){
         switch(column){
             case 0:
-                return String.class;
+                return Byte.class;
             default:
                 return Byte.class;
         }

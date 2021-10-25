@@ -3,10 +3,12 @@ package com.components.MemoryTable;
 import java.awt.Dimension;
 import java.util.Vector;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.Renderer;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
 
@@ -16,7 +18,7 @@ import java.awt.BorderLayout;
 
 public class MemoryTablePanel extends JPanel{
     private final static int ADDRESS_C_WIDTH = 60;
-    private final static int MEMORY_C_WIDTH = 40;
+    private final static int MEMORY_C_WIDTH = 25;
 
 
     private MemoryTableModel model;
@@ -35,11 +37,19 @@ public class MemoryTablePanel extends JPanel{
         for (Byte i = 0; i < MemoryTableModel.MEMORY_COLUMN_N; i++) {
             Vector<Byte> tes = new Vector<>();
             tes.add(i);
+            tes.add((byte)(i + 8));
+            tes.add((byte)(i + 16));
             test.add(tes);
         }
 
         model = new MemoryTableModel(test);
         table = new JTable(model);
+        table.setShowVerticalLines(false);
+        table.setShowHorizontalLines(false);
+        table.setBorder(BorderFactory.createEmptyBorder());
+        table.setIntercellSpacing(new Dimension());
+        MemoryTableCellRenderer rendrer = new MemoryTableCellRenderer();
+        table.setDefaultRenderer(Byte.class, rendrer);
         tableSetting();
         scrollPane.setViewportView(table);
 
@@ -47,7 +57,7 @@ public class MemoryTablePanel extends JPanel{
         add(scrollPane, BorderLayout.CENTER);
         add(Box.createVerticalStrut(ConstantsClass.SEPARATE_INTERVAL), BorderLayout.SOUTH);
 
-        setMaximumSize(new Dimension(100, 500));
+        setPreferredSize(new Dimension(200, 500));
 
     }
 

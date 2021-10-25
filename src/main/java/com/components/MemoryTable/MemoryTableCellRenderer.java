@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.Component;
 import javax.swing.BorderFactory;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -18,11 +19,11 @@ class MemoryTableCellRenderer extends DefaultTableCellRenderer {
         0, 0, BORDERWIDTH1, BORDERWIDTH1, Color.GRAY);
 
     private final Border b2 = BorderFactory.createCompoundBorder(
-        BorderFactory.createMatteBorder(0, 0, BORDERWIDTH2, 0, Color.BLACK),
-        BorderFactory.createMatteBorder(0, 0, 0, BORDERWIDTH1, Color.GRAY));
+        BorderFactory.createMatteBorder(0, 0, BORDERWIDTH1, 0, Color.GRAY),
+        BorderFactory.createMatteBorder(0, 0, 0, BORDERWIDTH2, Color.BLACK));
     private final Border b3 = BorderFactory.createCompoundBorder(
-        BorderFactory.createMatteBorder(0, 0, BORDERWIDTH3, 0, Color.BLACK),
-        BorderFactory.createMatteBorder(0, 0, 0, BORDERWIDTH1, Color.GRAY));
+        BorderFactory.createMatteBorder(0, 0, BORDERWIDTH1, 0, Color.GRAY),
+        BorderFactory.createMatteBorder(0, 0, 0, BORDERWIDTH3, Color.BLACK));
 
     protected MemoryTableCellRenderer() {
       super();
@@ -38,16 +39,15 @@ class MemoryTableCellRenderer extends DefaultTableCellRenderer {
         MemoryTableModel model = (MemoryTableModel) table.getModel();
         if (column == 0) {
             //アドレス表示
+            setHorizontalAlignment(SwingConstants.RIGHT);
             this.setText(String.format(ADDRESS_FORMAT, model.startAddress + row * MemoryTableModel.MEMORY_COLUMN_N));
         }else{
+            setHorizontalAlignment(SwingConstants.CENTER);
             this.setText(String.format(MEMORY_FORMAT, table.getValueAt(row, column)));
         }
-        if (column % MemoryTableModel.MEMORY_COLUMN_SPLIT_N == 0) {
-            if(column == 0){
-                setBorder(b3);
-            }else{
-                    setBorder(b2);
-            }
+        if(column == 0 || column == 4){
+            setBorder(b2);
+
         } else {
             setBorder(b1);
         }

@@ -1,6 +1,7 @@
 package com.components.registers;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 
@@ -50,6 +51,7 @@ public class RegistersPane extends JPanel{
         setLayout(new BorderLayout());
         add(scrollPane, BorderLayout.CENTER);
         add(Box.createVerticalStrut(100), BorderLayout.WEST);
+        setMinimumSize(new Dimension(300, 500));
 
     }
 
