@@ -10,7 +10,7 @@ public class MemoryTableModel extends DefaultTableModel{
     final static String ADDRESS_COLUMN = "Address";
     final static String ADDRESS_FORMAT = "%06x";
     final static String MEMORY_FORMAT = "%02x";
-    final static int MEMORY_COLUMN_N = 16;
+    final static int MEMORY_COLUMN_N = 8;
     final static int MEMORY_COLUMN_SPLIT_N = 4;
 
     private Vector<Vector<Byte>> memory;

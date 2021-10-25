@@ -15,7 +15,7 @@ import com.utils.ConstantsClass;
 import java.awt.BorderLayout;
 
 public class MemoryTablePanel extends JPanel{
-    private final static int ADDRESS_C_WIDTH = 50;
+    private final static int ADDRESS_C_WIDTH = 60;
     private final static int MEMORY_C_WIDTH = 40;
 
 
@@ -39,7 +39,7 @@ public class MemoryTablePanel extends JPanel{
         add(scrollPane, BorderLayout.CENTER);
         add(Box.createVerticalStrut(ConstantsClass.SEPARATE_INTERVAL), BorderLayout.SOUTH);
 
-        setMaximumSize(new Dimension(400, 300));
+        setMaximumSize(new Dimension(100, 500));
 
     }
 
@@ -55,7 +55,7 @@ public class MemoryTablePanel extends JPanel{
         DefaultTableColumnModel columnModel = (DefaultTableColumnModel) table.getColumnModel();
         columnModel.getColumn(0).setMaxWidth(ADDRESS_C_WIDTH);
         for (int i = 0; i < MemoryTableModel.MEMORY_COLUMN_N; i++) {
-            columnModel.getColumn(2).setMaxWidth(MEMORY_C_WIDTH);            
+            columnModel.getColumn(i+1).setMaxWidth(MEMORY_C_WIDTH);            
         }
         
 

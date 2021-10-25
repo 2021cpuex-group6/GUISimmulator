@@ -22,6 +22,7 @@ import javax.swing.border.BevelBorder;
 
 import com.components.Controls.ControlPanel;
 import com.components.InstructionTable.InstructionTablePanel;
+import com.components.MemoryTable.MemoryTablePanel;
 import com.components.registers.RegistersPane;
 import com.outerProcess.OuterProcessHandler;
 
@@ -41,6 +42,7 @@ public class MainWindow extends JFrame implements WindowListener{
     protected RegistersPane registersPanel;
     protected InstructionTablePanel instructionPanel;
     protected ControlPanel controlPanel;
+    protected MemoryTablePanel memoryTablePanel;
     private GridBagLayout layout;
 
     public OuterProcessHandler processHandler;
@@ -63,9 +65,11 @@ public class MainWindow extends JFrame implements WindowListener{
         mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
         registersPanel = new RegistersPane(this);
+        memoryTablePanel = new MemoryTablePanel();
         JPanel centerPanel = getCenterPanel();
         mainPanel.add(registersPanel);
         mainPanel.add(centerPanel);
+        mainPanel.add(memoryTablePanel);
 
         JPanel messagePanel = getMessagePanel();
         
