@@ -151,8 +151,10 @@ public class OuterProcessHandler {
         if(res.startsWith(RES_MEMCHANGE)){
             res = receiveWithCheck();
             checkMemChange(res, back);
+            mainWindow.connecter.clearHighlight();;
         }else{
             checkRegChange(res, back);
+            mainWindow.connecter.clearMemHighlight();
         }
     }
 

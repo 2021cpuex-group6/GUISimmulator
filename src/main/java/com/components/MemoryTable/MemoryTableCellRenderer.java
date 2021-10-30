@@ -16,6 +16,7 @@ class MemoryTableCellRenderer extends DefaultTableCellRenderer {
     private final static int BORDERWIDTH3 = 3;
     final static String ADDRESS_FORMAT = "%06x";
     final static String MEMORY_FORMAT = "%02x";
+    private final static Color Highlight = Color.getHSBColor(0.1f, 0.75f, 1f);
 
     private final Border b1 = BorderFactory.createMatteBorder(
         0, 0, BORDERWIDTH1, BORDERWIDTH1, Color.GRAY);
@@ -39,13 +40,23 @@ class MemoryTableCellRenderer extends DefaultTableCellRenderer {
         super.getTableCellRendererComponent(
             table, value, isEditable && isSelected, hasFocus, row, column);
         MemoryTableModel model = (MemoryTableModel) table.getModel();
+        long address = model.startAddress + row * ConstantsClass.MEMORY_COLUMN_N + column -1;
         if (column == 0) {
             //アドレス表示
             setHorizontalAlignment(SwingConstants.RIGHT);
-            this.setText(String.format(ADDRESS_FORMAT, model.startAddress + row * ConstantsClass.MEMORY_COLUMN_N));
+            this.setText(String.format(ADDRESS_FORMAT, address+1));
         }else{
             setHorizontalAlignment(SwingConstants.CENTER);
             this.setText(String.format(MEMORY_FORMAT, table.getValueAt(row, column)));
+            // 強調表示
+            if(model.hasHighlighted){
+                if(model.highlightedWord <= address && 
+                    address < model.highlightedWord + ConstantsClass.WORD_BYTE_N){
+                    setBackground(Highlight);
+                }else{
+                    setBackground(Color.white);
+                }
+            }
         }
         if(column == 0 || column == 4){
             setBorder(b2);

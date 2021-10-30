@@ -16,8 +16,9 @@ public class MemoryTableModel extends DefaultTableModel{
     final static int MEMORY_COLUMN_SPLIT_N = 4;
 
     public long startAddress = 0; //先頭アドレス
+    public long highlightedWord = -1; // ハイライト表示されているワードのLSBのアドレス
+    public boolean hasHighlighted = false;
     private Vector<Vector<Byte>> memory;
-
 
     
     public MemoryTableModel(){

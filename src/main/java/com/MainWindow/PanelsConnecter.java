@@ -44,6 +44,10 @@ public class PanelsConnecter {
         mainWindow.memoryTablePanel.setHighlightWord(address);
     }
 
+    public void clearMemHighlight(){
+        mainWindow.memoryTablePanel.clearHighlight();
+    }
+
     public void reset(){
 
     }
