@@ -2,6 +2,7 @@ package com.components.registers;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.Collections;
@@ -16,11 +17,12 @@ import com.utils.BaseNumber;
 import com.utils.IntegerInputVerifier;
 
 public class RegistersPanelUnit extends JPanel implements FocusListener{
-    private final static int FIELD_W = 10;
-    private final static int FIELD_W_BIN = 25;
+    private final static int FIELD_W = 12;
+    private final static int FIELD_W_BIN = 33;
     private final static int HEX_LEN = 8;
     private final static int BIN_LEN = 32;
     private final static int OCT_LEN = 11;
+    private final static int FONT_SIZE = 12;
 
     private JLabel label;
     private JTextField field;
@@ -54,6 +56,7 @@ public class RegistersPanelUnit extends JPanel implements FocusListener{
         fieldV = Integer.parseInt(initV);
         field.setInputVerifier(new IntegerInputVerifier());
         field.addFocusListener(this);
+        field.setFont(new Font(Font.MONOSPACED, Font.PLAIN, FONT_SIZE));
         if(index == 0 && forInteger){
             field.setEditable(false);
         }
