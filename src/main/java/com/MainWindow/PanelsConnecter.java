@@ -48,6 +48,10 @@ public class PanelsConnecter {
         mainWindow.memoryTablePanel.clearHighlight();
     }
 
+    public long getMemStartAddress(){
+        return mainWindow.memoryTablePanel.getNowStartAddress();
+    }
+
     public void reset(){
 
     }

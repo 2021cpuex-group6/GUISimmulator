@@ -36,6 +36,7 @@ public class OuterProcessHandler {
     protected final static String COMMAND_RESET = "re";
     protected final static String COMMAND_INFO = "i";
     protected final static String COMMAND_QUIT = "quit";
+    protected final static String COMMAND_MEMREAD = "mr";
 
     private final static String RES_END = "End";
     private final static String RES_ALREADY_END = "AEnd";
@@ -95,6 +96,28 @@ public class OuterProcessHandler {
         }
     }
 
+    // startAddressを開始時点として，MEMORY_SHOW_LINE_N行分のメモリを更新する
+    public void memSynchronize(){
+        long startAddress = mainWindow.connecter.getMemStartAddress();
+        int wordN = ConstantsClass.MEMORY_COLUMN_N / ConstantsClass.WORD_BYTE_N * ConstantsClass.MEMORY_SHOW_LINE_N;
+        String command = COMMAND_MEMREAD + " " + startAddress + " " + wordN;
+        sendCommand(command);
+        boolean loopFlag = true;
+        long nowAddress = startAddress;
+        while(loopFlag){
+            // 一行ずつパースし，テーブルに書き込む
+            String[] resList = receiveWithCheck().split(" ");
+            for (String string : resList) {
+                byte value = Byte.parseByte(string);
+                mainWindow.connecter.memSetByte(nowAddress++, value);
+            }
+            wordN -= resList.length / ConstantsClass.WORD_BYTE_N;
+            loopFlag = (wordN > 0);
+        }
+
+
+    }
+
     public void doSingleCommand(Command command){
         // 特に引数を受け取らない命令を実行する
         if(command == Command.BreakDelete || command == Command.BreakSet || 
@@ -115,6 +138,7 @@ public class OuterProcessHandler {
                     readRegisters();
                     int nowPC = mainWindow.connecter.getPC();
                     mainWindow.connecter.showNowInstruction(nowPC-ConstantsClass.INSTRUCTION_BYTE_N);
+                    memSynchronize();
                 }
                 break;
             case DoNext:
@@ -181,6 +205,7 @@ public class OuterProcessHandler {
     public void shutdown(){
         // main.exe を終了する
         doSingleCommand(Command.Quit);
+        process.destroy();
     }
 
     public void writeRegister(int index, boolean forInteger, int value){
