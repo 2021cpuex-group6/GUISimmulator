@@ -77,6 +77,18 @@ public class MainWindow extends JFrame implements WindowListener{
         outerPanel.add(messagePanel, BorderLayout.SOUTH);
 
         setContentPane(outerPanel);
+
+        // 終了時にmain.exeも終了するように
+        Runtime.getRuntime().addShutdownHook(
+            new Thread(){
+                public void run(){
+                    if(processHandler != null){
+                        processHandler.shutdown();
+                        processHandler = null;
+                    }
+                }
+            }
+        );
         
 
     }
@@ -133,10 +145,7 @@ public class MainWindow extends JFrame implements WindowListener{
 
     @Override
     public void windowClosing(WindowEvent e) {
-        if(processHandler != null){
-            processHandler.shutdown();
-            processHandler = null;
-        }
+
         Rectangle rec = this.getBounds();
         properties.setProperty(INIT_X, "" + rec.x);
         properties.setProperty(INIT_Y, "" + rec.y);
