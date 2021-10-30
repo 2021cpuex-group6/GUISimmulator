@@ -42,6 +42,7 @@ public class OuterProcessHandler {
     private final static String RES_Stop = "Stop";
     private final static String RES_NO_CHANGE = "No";
     private final static String RES_NO_HISTORY = "NoHis";
+    private final static String RES_MEMCHANGE = "mem";
     
     private MainWindow mainWindow;
     private PrintStream sender; // プログラムに送る
@@ -118,11 +119,22 @@ public class OuterProcessHandler {
                 break;
             case DoNext:
                 res = receiveWithCheck();
-                checkRegChange(res, false);
+                if(res.startsWith(RES_END)){
+                    mainWindow.setMessage(FILE_ENDED);
+                    res = receiveWithCheck();
+                }else if(res.startsWith(RES_ALREADY_END)){
+                    mainWindow.setMessage(ALREADY_END);
+                    break;
+                }
+                checkDif(res, false);
                 break;
             case Back:
                 res = receiveWithCheck();
-                checkRegChange(res, true);
+                if(res.startsWith(RES_NO_HISTORY)){
+                    mainWindow.setMessage(NO_HISTORY);
+                    break;
+                }
+                checkDif(res, true);
                 break;
             case Quit:
                 resErrorCheck();
@@ -133,20 +145,36 @@ public class OuterProcessHandler {
         }
     }
 
-    private void checkEnd() {
-        // nextでちょうど終了したとき、追加で End とくるので、それが来ていたら検知
-        try {
-            if(receiver.ready()){
-                if(receiver.readLine().startsWith(RES_END)){
-                    mainWindow.setMessage(FILE_ENDED);
-                    
-                }
-            }
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            ErrorChecker.errorCheck(e);
+
+    // 命令実行後，返ってくる差分を調べて反映させる
+    private void checkDif(String res, boolean back){
+        if(res.startsWith(RES_MEMCHANGE)){
+            res = receiveWithCheck();
+            checkMemChange(res, back);
+        }else{
+            checkRegChange(res, back);
         }
     }
+
+    private void checkMemChange(String res, boolean back){
+        // resはアドレスとLSB側からByteを4つ空白区切りでまとめたもの
+        String resList[] = res.split(" ");
+        long address = Long.parseLong(resList[0]);
+        for (int i = 0; i < ConstantsClass.WORD_BYTE_N; i++) {
+            byte value = Byte.parseByte(resList[1+i]);
+            mainWindow.connecter.memSetByte(address+i, value);
+        }
+        mainWindow.connecter.setHighlightWord(address);
+
+        int showInstructionPC =  mainWindow.connecter.getPC();
+        if(back) showInstructionPC -= ConstantsClass.INSTRUCTION_BYTE_N;
+        int factor = back ? -1 : 1;
+
+        mainWindow.connecter.pcIncrement(factor);
+        mainWindow.connecter.showNowInstruction(showInstructionPC);
+
+    }
+
 
     public void shutdown(){
         // main.exe を終了する
@@ -233,7 +261,6 @@ public class OuterProcessHandler {
                 try {
                     if(receiver.ready()){
                         // まだ表示があるので，再びパース
-                        // この命令でちょうど終わるとき，Endと表示されるので，その処理も行う
                         res = receiver.readLine();
                         if(res.startsWith(RES_END)){
                             mainWindow.setMessage(FILE_ENDED);

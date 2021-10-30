@@ -36,6 +36,14 @@ public class PanelsConnecter {
         mainWindow.registersPanel.clearHighlight();
     }
 
+    public void memSetByte(long address, byte value){
+        mainWindow.memoryTablePanel.setByte(address, value);
+    }
+
+    public void setHighlightWord(long address){
+        mainWindow.memoryTablePanel.setHighlightWord(address);
+    }
+
     public void reset(){
 
     }

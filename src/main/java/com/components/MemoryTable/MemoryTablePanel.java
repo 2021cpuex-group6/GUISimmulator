@@ -26,8 +26,7 @@ public class MemoryTablePanel extends JPanel{
     private MemoryTableModel model;
     private JTable table;
 
-    private int highlightedRow = -1;
-    private int highlightedColumn = -1;
+    private long highlightedWord ; // ハイライト表示されているワードのLSBのアドレス
 
 
     public MemoryTablePanel(){
@@ -102,9 +101,11 @@ public class MemoryTablePanel extends JPanel{
         return getNowStartAddress() <= address && address < getNowStartAddress() + ConstantsClass.MEMORY_SHOW_LINE_N * ConstantsClass.MEMORY_COLUMN_N;
     }
 
-    public void setHighlight(long address){
-        // 強調表示
+    public void setHighlightWord(long address){
+        // そのワード全体を強調表示
+        if(inPrintedRange(address)){
 
+        }
     }
 
     public void setByte(long address, byte value){
