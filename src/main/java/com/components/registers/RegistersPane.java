@@ -19,7 +19,6 @@ public class RegistersPane extends JPanel{
 
     private final static int REGISTERS_COL_N = 1;
     private final static int REGISTERS_ROW_N = 32;
-    private final static int NON_REG_IND = -1; // 該当するレジスタが存在しないときのインデックス
 
 
 
@@ -27,13 +26,11 @@ public class RegistersPane extends JPanel{
     private ArrayList<RegistersPanelUnit> fRegisters;
     private JPanel iPanel;
     private JPanel fPanel;
-    private int highlightedReg;
     private MainWindow mainWindow;
 
     public RegistersPane(MainWindow mainWindow){
         super();
         this.mainWindow = mainWindow;
-        highlightedReg = NON_REG_IND;
         iRegisters = new ArrayList<>(ConstantsClass.REGISTER_N+1);
         fRegisters = new ArrayList<>(ConstantsClass.REGISTER_N+1);
         iPanel = getIPanel();
@@ -115,13 +112,8 @@ public class RegistersPane extends JPanel{
     public void setRegister(boolean forInteger, int index, int value, boolean highlight){
         // レジスタに値をセット
         // forInteger ... 整数レジスタへセットするならtrue, 浮動小数点レジスタならfalse
-        if(highlightedReg != NON_REG_IND){
-            iRegisters.get(highlightedReg).setHighlighted(false);
-            highlightedReg = NON_REG_IND;
-        }
         if(highlight){
             iRegisters.get(index).setHighlighted(true);
-            highlightedReg = index;
         }
 
         if(forInteger){
@@ -144,10 +136,15 @@ public class RegistersPane extends JPanel{
 
     public void clearHighlight(){
         // highlight表示を消す（nopなどの実行の時）
-        if(highlightedReg != NON_REG_IND){
-            iRegisters.get(highlightedReg).setHighlighted(false);
-            highlightedReg = NON_REG_IND;
+        for (RegistersPanelUnit registersPanelUnit : iRegisters) {
+            registersPanelUnit.setHighlighted(false);
+            
         }
+        for (RegistersPanelUnit registersPanelUnit : fRegisters) {
+            registersPanelUnit.setHighlighted(false);
+            
+        }
+
     }
 
     public void changeBase(BaseNumber base, boolean signed){

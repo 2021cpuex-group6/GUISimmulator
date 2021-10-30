@@ -118,7 +118,6 @@ public class OuterProcessHandler {
                 break;
             case DoNext:
                 res = receiveWithCheck();
-                checkEnd();
                 checkRegChange(res, false);
                 break;
             case Back:
@@ -203,6 +202,7 @@ public class OuterProcessHandler {
         int showInstructionPC =  mainWindow.connecter.getPC();
         if(back) showInstructionPC -= ConstantsClass.INSTRUCTION_BYTE_N;
         int factor = back ? -1 : 1;
+        mainWindow.connecter.clearHighlight();
         if(res.startsWith(RES_ALREADY_END)){
             // 終了済み
             mainWindow.setMessage(ALREADY_END);
@@ -212,24 +212,48 @@ public class OuterProcessHandler {
             mainWindow.setMessage(NO_HISTORY);
             return;
         } else if(!res.startsWith(RES_NO_CHANGE)){
-            String resList[] = res.split(" ");
-            int regInd = 0;
+            boolean pcChanged = false;
+            boolean continueFlag;
+            do{
+                continueFlag  = false;
+                // 2箇所以上レジスタが変更されている場合は，表示が数行にわたるため，whileですべて検査
+                String resList[] = res.split(" ");
+                int regInd = 0;
+    
+                if(resList[0].equals("pc")){
+                    regInd = ConstantsClass.REGISTER_N;   
+                    pcChanged = true;
+                }else {
+                    regInd = Integer.parseInt(resList[0].substring(1));
+                    
+                }
+                mainWindow.connecter.setRegister(true, regInd, Integer.parseInt(resList[1]),
+                true);
 
-            if(resList[0].equals("pc")){
-                regInd = ConstantsClass.REGISTER_N;   
-            }else {
-                regInd = Integer.parseInt(resList[0].substring(1));
-                // pcが変更されてなければインクリメント
+                try {
+                    if(receiver.ready()){
+                        // まだ表示があるので，再びパース
+                        // この命令でちょうど終わるとき，Endと表示されるので，その処理も行う
+                        res = receiver.readLine();
+                        if(res.startsWith(RES_END)){
+                            mainWindow.setMessage(FILE_ENDED);
+                        }else{
+                            continueFlag = true;
+                        }
+                    }
+                } catch (IOException e) {
+                    ErrorChecker.errorCheck(e);
+                }
 
+            }while(continueFlag);
+
+            // pcが変更されてなければインクリメント
+            if(!pcChanged){
                 mainWindow.connecter.pcIncrement(factor);
-
             }
-            mainWindow.connecter.setRegister(true, regInd, Integer.parseInt(resList[1]),
-                        true);
                         
         }else{
             mainWindow.connecter.pcIncrement(factor);
-            mainWindow.connecter.clearHighlight();
         }
         mainWindow.connecter.showNowInstruction(showInstructionPC);
     }
