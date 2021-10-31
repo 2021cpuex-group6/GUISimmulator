@@ -89,6 +89,9 @@ public class MainWindow extends JFrame implements WindowListener{
                 }
             }
         );
+
+        MenuBar menuBar = new MenuBar(this);
+        setJMenuBar(menuBar);
         
 
     }
