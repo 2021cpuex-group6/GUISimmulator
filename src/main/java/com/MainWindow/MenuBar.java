@@ -6,14 +6,16 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import com.tools.Translator.Translator;
+
 public class MenuBar extends JMenuBar{
     private final static String MENU_TOOL = "ツール";
 
     private final static String ITEM_TRANSLATOR = "変換ツール";
 
     private MainWindow main;
-    public MenuBar(MainWindow main){
-        this.main= main;
+    public MenuBar(MainWindow mainWindow){
+        this.main= mainWindow;
 
         JMenu toolMenu = new JMenu(MENU_TOOL);
 
@@ -21,7 +23,7 @@ public class MenuBar extends JMenuBar{
         translatorItem.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO Auto-generated method stub
+                Translator translator = new Translator(main.properties);
                 
             }
         });
