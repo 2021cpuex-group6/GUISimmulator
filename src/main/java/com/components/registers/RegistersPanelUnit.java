@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.nio.ByteBuffer;
 import java.util.Collections;
 
 import javax.swing.BoxLayout;
@@ -14,9 +15,11 @@ import javax.swing.JTextField;
 
 import com.MainWindow.MainWindow;
 import com.utils.BaseNumber;
+import com.utils.ErrorChecker;
 import com.utils.IntegerInputVerifier;
 
 public class RegistersPanelUnit extends JPanel implements FocusListener{
+    private final static String INPUT_VALID_VALUE = "適切な値を入力してください";
     private final static int FIELD_W = 12;
     private final static int FIELD_W_BIN = 33;
     private final static int HEX_LEN = 8;
@@ -77,34 +80,56 @@ public class RegistersPanelUnit extends JPanel implements FocusListener{
     @Override
     public void focusLost(FocusEvent e) {
         // TODO Auto-generated method stub
-        fieldV = fieldParse(field.getText());
-        if(mainWindow.processHandler != null){
-            mainWindow.processHandler.writeRegister(index, forInteger, fieldV);
+        int[] ansPair = fieldParse(field.getText());
+        if(ansPair[1] >= 0){
+            fieldV = ansPair[0];
+            if(mainWindow.processHandler != null){
+                mainWindow.processHandler.writeRegister(index, forInteger, fieldV);
+            }
         }
         
         
     }
-    
 
-    private int fieldParse(String text){
+    // fieldの値をパースし，適切な値なら第一要素にその値，第二要素に0以上の値を入れる
+    private int[] fieldParse(String text){
         int ans = 0;
+        int[] ansPair = new int[2];
+        ansPair[1] = 0;
         try{
             ans = Integer.parseInt(text);
-            return ans;
+            ansPair[0] = ans;
+            return ansPair;
 
         }catch(NumberFormatException e){
         }
-        if(text.startsWith("0x")){
-            ans = Integer.parseUnsignedInt(text.substring(2), 16);
-        }else if(text.startsWith("0b")){
-            ans = Integer.parseUnsignedInt(text.substring(2), 2);
-        }else if(text.startsWith("0o")){
-            ans = Integer.parseUnsignedInt(text.substring(2), 8);
-        }else{
-            ans = Integer.parseUnsignedInt(text.substring(2));
-        }
 
-        return ans;
+        try{
+            if(text.startsWith("0x")){
+                ans = Integer.parseUnsignedInt(text.substring(2), 16);
+            }else if(text.startsWith("0b")){
+                ans = Integer.parseUnsignedInt(text.substring(2), 2);
+            }else if(text.startsWith("0o")){
+                ans = Integer.parseUnsignedInt(text.substring(2), 8);
+            }else{
+                if(!forInteger){
+                    float ansF = Float.parseFloat(text);
+                    ByteBuffer buffer = ByteBuffer.allocate(Integer.SIZE / Byte.SIZE + 4);
+                    buffer.putFloat(ansF);
+                    buffer.rewind();
+                    ans = buffer.getInt();
+                }else{
+                    ans = Integer.parseUnsignedInt(text.substring(2));
+                }
+            }
+
+        }catch(NumberFormatException e){
+            ansPair[1] = -1;
+            mainWindow.setMessage(INPUT_VALID_VALUE);
+        }
+        ansPair[0] = ans;
+
+        return ansPair;
 
     }
 
@@ -128,7 +153,14 @@ public class RegistersPanelUnit extends JPanel implements FocusListener{
                 break;
             case DEC:
                 if(signed){
-                    setValue = Integer.toString(fieldV);
+                    if(!forInteger){
+                        ByteBuffer buffer = ByteBuffer.allocate(Integer.SIZE / Byte.SIZE + 4);
+                        buffer.putInt(fieldV);
+                        buffer.rewind();
+                        setValue = Float.toString(buffer.getFloat());
+                    }else{
+                        setValue = Integer.toString(fieldV);
+                    }
                 }else{
                     setValue = Integer.toUnsignedString(fieldV);
                 }

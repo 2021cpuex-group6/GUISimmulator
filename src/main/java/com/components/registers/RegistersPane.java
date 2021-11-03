@@ -113,11 +113,17 @@ public class RegistersPane extends JPanel{
         // レジスタに値をセット
         // forInteger ... 整数レジスタへセットするならtrue, 浮動小数点レジスタならfalse
         if(highlight){
-            iRegisters.get(index).setHighlighted(true);
+            if(forInteger){
+                iRegisters.get(index).setHighlighted(true);
+            }else{
+                fRegisters.get(index).setHighlighted(true);
+            }
         }
 
         if(forInteger){
             iRegisters.get(index).setFieldV(value);
+        }else{
+            fRegisters.get(index).setFieldV(value);
         }
     }
 

@@ -217,7 +217,10 @@ public class OuterProcessHandler {
                 targetReg = ConstantsClass.INTEGER_REGISTER_PREFIX+String.format("%02d", index);
             }
         }else{
-            return;
+            if(index == ConstantsClass.REGISTER_N){
+            }else{
+                targetReg = ConstantsClass.FLOAT_REGISTER_PREFIX+String.format("%02d", index);
+            }
         }
         String message = COMMAND_REG_WRITE + " " + targetReg +" "  +value;
         sendCommand(message);
@@ -274,15 +277,18 @@ public class OuterProcessHandler {
                 // 2箇所以上レジスタが変更されている場合は，表示が数行にわたるため，whileですべて検査
                 String resList[] = res.split(" ");
                 int regInd = 0;
+                boolean isInteger = false;
     
                 if(resList[0].equals("pc")){
+                    isInteger = true;
                     regInd = ConstantsClass.REGISTER_N;   
                     pcChanged = true;
                 }else {
+                    isInteger = resList[0].substring(0, 1).equals(ConstantsClass.INTEGER_REGISTER_PREFIX);                    
                     regInd = Integer.parseInt(resList[0].substring(1));
                     
                 }
-                mainWindow.connecter.setRegister(true, regInd, Integer.parseInt(resList[1]),
+                mainWindow.connecter.setRegister(isInteger, regInd, Integer.parseInt(resList[1]),
                 true);
 
                 try {
