@@ -60,7 +60,7 @@ public class RegistersPanelUnit extends JPanel implements FocusListener{
         field.setInputVerifier(new IntegerInputVerifier());
         field.addFocusListener(this);
         field.setFont(new Font(Font.MONOSPACED, Font.PLAIN, FONT_SIZE));
-        if(index == 0 && forInteger){
+        if(index == 0 ){
             field.setEditable(false);
         }
 

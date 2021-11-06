@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Vector;
+import java.util.regex.Pattern;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -14,15 +15,19 @@ import com.utils.ErrorChecker;
 
 public class InstructionTableModel extends DefaultTableModel{
     private final static int BREAK_C_NUM = 0;
-
+    private final static String INSTRE = "^\\s+[a-z]+.*";
+    private final static String NOT_INST_ROW = "------";
+    private final static String JUMP_TO_ENTRYPOINT = "JUMP TO ENTRYPOPINT";
     final static String BREAK_COLUMN = "Break";
     final static String ADDRESS_COLUMN = "Address";
     final static String INSTRUCTION_COLUMN = "Instruction";
     final static String ADDRESS_FORMAT = "%06x";
 
+
     private Vector<String> instructionList;
     private Vector<String> addressList;
     private Vector<Boolean> breakList;
+    protected ArrayList<Integer> lineList; // 命令アドレス/4からファイルの行数へのマップ
     
     public InstructionTableModel(){
         super();
@@ -46,20 +51,40 @@ public class InstructionTableModel extends DefaultTableModel{
             }
             br.close();
 
-            instructionList = new Vector<String>(lineN);
-            addressList = new Vector<String>(lineN);
-            breakList = new Vector<Boolean> (lineN);
+            instructionList = new Vector<String>(lineN+1);
+            addressList = new Vector<String>(lineN+1);
+            breakList = new Vector<Boolean> (lineN+1);
+            lineList =new ArrayList<Integer>(0);
+            lineList.ensureCapacity(lineN+1);
+
+            Pattern p = Pattern.compile(INSTRE);
 
             br = new BufferedReader(new FileReader(filepath));
             now = br.readLine();
-            int i = 0;
+            
+            //最初に追加されるエントリポイントへのジャンプ分
+            instructionList.add(JUMP_TO_ENTRYPOINT);
+            addressList.add(String.format(ADDRESS_FORMAT, 0));
+            lineList.add(0);
+            breakList.add(false);
+
+            int i = 1;
+            int instN = 1; // 命令の行（コメントなどはのぞく
             while(now != null){
                 instructionList.add(now);
-                addressList.add(String.format(ADDRESS_FORMAT, i*ConstantsClass.INSTRUCTION_BYTE_N));
+                if(p.matcher(now).find()){
+                    // 命令の行
+                    addressList.add(String.format(ADDRESS_FORMAT, instN*ConstantsClass.INSTRUCTION_BYTE_N));
+                    lineList.add(i);
+                    instN++;
+                }else{
+                    addressList.add(NOT_INST_ROW);
+                }
                 breakList.add(false);
                 now = br.readLine();
                 i++;
             }
+            lineList.trimToSize();
             br.close();
             
         } catch (FileNotFoundException e) {

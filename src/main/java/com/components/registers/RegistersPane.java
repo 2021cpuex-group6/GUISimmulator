@@ -125,6 +125,7 @@ public class RegistersPane extends JPanel{
         }else{
             fRegisters.get(index).setFieldV(value);
         }
+        repaint();
     }
 
     public int pcIncrement(int factor){
