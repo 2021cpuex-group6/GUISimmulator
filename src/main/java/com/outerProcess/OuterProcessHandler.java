@@ -49,8 +49,8 @@ public class OuterProcessHandler {
     private PrintStream sender; // プログラムに送る
     private BufferedReader receiver; //結果受け取り
     private Process process;
+    // 開くアセンブリファイル (or バイナリコード)を指定してプロセスを起動する
     public OuterProcessHandler(MainWindow main, String path){
-        // 開くアセンブリファイル (or バイナリコード)を指定してプロセスを起動する
         this.mainWindow = main;
         try {
             process = Runtime.getRuntime().exec(SIMMULATOR_EXE + " \""+ path + "\" -g");
@@ -62,14 +62,14 @@ public class OuterProcessHandler {
         }
     }
 
+    // プロセスにコマンドを送る
     private void sendCommand(String message){
-        // プロセスにコマンドを送る
         sender.println(message);
         sender.flush();
     }
 
+    // プロセスからメッセージを受け取り、Errorかどうかチェックする
     private String receiveWithCheck(){
-        // プロセスからメッセージを受け取り、Errorかどうかチェックする
         try {
             String message = receiver.readLine();
             if(message.startsWith(ERROR_CODE)){
@@ -118,8 +118,8 @@ public class OuterProcessHandler {
 
     }
 
+    // 特に引数を受け取らない命令を実行する
     public void doSingleCommand(Command command){
-        // 特に引数を受け取らない命令を実行する
         if(command == Command.BreakDelete || command == Command.BreakSet || 
                 command == Command.RegWrite){
             ErrorChecker.errorCheck(INVALID_ARG_BUG + " doSingleCommand内");
@@ -202,8 +202,8 @@ public class OuterProcessHandler {
     }
 
 
+    // main.exe を終了する
     public void shutdown(){
-        // main.exe を終了する
         doSingleCommand(Command.Quit);
         process.destroy();
     }
@@ -228,8 +228,8 @@ public class OuterProcessHandler {
 
     }
 
+    // 正常なら何も返されないときにエラーかどうかを調べる
     private void resErrorCheck(){
-        // 正常なら何も返されないときにエラーかどうかを調べる
         try {
             if(receiver.ready()){
                 if(receiver.readLine().startsWith(ERROR_CODE)){
@@ -255,8 +255,8 @@ public class OuterProcessHandler {
         }
     }
 
+    // 命令実行(順方向、逆方向)後、レジスタの変更を確認
     private void checkRegChange(String res, boolean back){
-        // 命令実行(順方向、逆方向)後、レジスタの変更を確認
         int showInstructionPC =  mainWindow.connecter.getPC();
         if(back) showInstructionPC -= ConstantsClass.INSTRUCTION_BYTE_N;
         int factor = back ? -1 : 1;
@@ -318,8 +318,8 @@ public class OuterProcessHandler {
         mainWindow.connecter.showNowInstruction(showInstructionPC);
     }
 
+    // レジスタの情報を受け取り、更新
     private void readRegisters(){
-        // レジスタの情報を受け取り、更新
         sendCommand(COMMAND_REG_READ);
         String[] results = new String[ConstantsClass.REGISTER_KINDS];
         results[0] = receiveWithCheck();
@@ -328,8 +328,8 @@ public class OuterProcessHandler {
         updateRegisters(results);
     }
     
+    // レジスタの更新
     private void updateRegisters(String[] res){
-        // レジスタの更新
         // シミュレータからの結果を改行ごとに区切って配列で受け取る
         mainWindow.connecter.setRegister(true, ConstantsClass.REGISTER_N, Integer.parseInt(res[0]), false);
         String[] resultsI = res[1].split(" ");

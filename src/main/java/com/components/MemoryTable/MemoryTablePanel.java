@@ -1,6 +1,8 @@
 package com.components.MemoryTable;
 
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.Dimension;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -35,17 +37,18 @@ public class MemoryTablePanel extends JPanel{
     private final static int ADDRESS_C_WIDTH = 60;
     private final static int MEMORY_C_WIDTH = 25;
     private final static int CONTROL_PANEL_INTERVAL = 50;
-    private final static int START_ADDRESS_SWITCH_UNIT = 0x1000; // 表示されるメモリの開始アドレスを変更する単位
     private final static String CONTROL_LABEL_1 = "開始アドレス: 0x";
     private final static String CONTROL_LABEL_2 = "000";
     private final static String CONTROL_BUTTON_TEXT = "変更";
     private final static String START_ADDRESS_OUT_OF_RANGE = "適切な範囲内のアドレスを16進数で入力してください（ 0x0 ~ 0x%x）．";
+    private final static int START_ADDRESS_SWITCH_UNIT = 0x1000;
 
 
     private MemoryTableModel model;
     private JTable table;
     private int pageN;
     private MainWindow main;
+    private JSpinner spinner;
 
 
 
@@ -119,12 +122,21 @@ public class MemoryTablePanel extends JPanel{
         
         pageN = ConstantsClass.MEMORY_BYTE_N / (ConstantsClass.MEMORY_SHOW_LINE_N * ConstantsClass.MEMORY_COLUMN_N);
         SpinnerNumberModel spinnerModel = new SpinnerNumberModel(0, 0, pageN, 1);
-        JSpinner spinner = new JSpinner(spinnerModel);
+        spinner = new JSpinner(spinnerModel);
         JSpinner.DefaultEditor editor = (JSpinner.DefaultEditor) spinner.getEditor();
         JFormattedTextField ftf = editor.getTextField();
         ftf.setFormatterFactory(makeFFactory());
 
         JButton button = new JButton(CONTROL_BUTTON_TEXT);
+        button.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // メモリの表示開始アドレスを変え，読み込みしなおす
+                model.startAddress = ((int)spinner.getValue()) * START_ADDRESS_SWITCH_UNIT;
+                main.processHandler.memSynchronize();
+                repaint();
+            }
+        });
 
         panel.add(Box.createHorizontalStrut(CONTROL_PANEL_INTERVAL));
         panel.add(label1);
