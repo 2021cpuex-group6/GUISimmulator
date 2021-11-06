@@ -19,10 +19,10 @@ public class ConstantsClass {
 
     public  static void checkConstants(){
         // 定数が制約を満たしているか確認
-        boolean res = false;
-        res  = res || ((MEMORY_SHOW_LINE_N  * MEMORY_COLUMN_N) == 0x1000);
-        res = res || ((MEMORY_BYTE_N % (MEMORY_SHOW_LINE_N * MEMORY_COLUMN_N)) == 0);
-        if(res){
+        boolean res = true;
+        res  = res && ((MEMORY_SHOW_LINE_N  * MEMORY_COLUMN_N) == 0x1000);
+        res = res && ((MEMORY_BYTE_N % (MEMORY_SHOW_LINE_N * MEMORY_COLUMN_N)) == 0);
+        if(!res){
             ErrorChecker.errorCheck(INVALID_CONSTANT_ERROR);
         }
     }
