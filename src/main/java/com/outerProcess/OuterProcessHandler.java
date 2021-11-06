@@ -324,6 +324,7 @@ public class OuterProcessHandler {
         String[] results = new String[ConstantsClass.REGISTER_KINDS];
         results[0] = receiveWithCheck();
         results[1] = receiveWithCheck();
+        results[2] = receiveWithCheck();
         updateRegisters(results);
     }
     
@@ -331,9 +332,13 @@ public class OuterProcessHandler {
         // レジスタの更新
         // シミュレータからの結果を改行ごとに区切って配列で受け取る
         mainWindow.connecter.setRegister(true, ConstantsClass.REGISTER_N, Integer.parseInt(res[0]), false);
-        String[] results = res[1].split(" ");
+        String[] resultsI = res[1].split(" ");
         for(int i = 0; i < ConstantsClass.REGISTER_N; i++){
-            mainWindow.connecter.setRegister(true, i, Integer.parseInt(results[i]), false);
+            mainWindow.connecter.setRegister(true, i, Integer.parseInt(resultsI[i]), false);
+        }
+        String[] resultsF = res[2].split(" ");
+        for(int i = 0; i < ConstantsClass.REGISTER_N; i++){
+            mainWindow.connecter.setRegister(false, i, Integer.parseInt(resultsF[i]), false);
         }
 
     }
