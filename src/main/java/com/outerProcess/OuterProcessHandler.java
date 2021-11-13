@@ -20,7 +20,7 @@ public class OuterProcessHandler {
     private final static String ERROR_CODE = "Error";
     private final static String BUG_REPORT = "バグと思われるので報告お願いします。";
     private final static String INVALID_ARG_BUG = "バグ: 引数を間違えています。";
-    private final static String ALREADY_END = "すでに終了しています。右クリックメニューからリセットをしてください(未実装)。";
+    private final static String ALREADY_END = "すでに終了しています。ツールメニュー→リセットを押してください。";
     private final static String NO_HISTORY = "これ以上戻れません。";
     private final static String FILE_ENDED = "終了しました。";
 
@@ -163,9 +163,8 @@ public class OuterProcessHandler {
             case Quit:
                 resErrorCheck();
                 break;
-                
-
-
+            default:
+                break;
         }
     }
 

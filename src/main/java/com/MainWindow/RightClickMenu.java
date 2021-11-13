@@ -1,6 +1,7 @@
 package com.MainWindow;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.AbstractAction;
 import javax.swing.JMenuItem;
@@ -15,16 +16,16 @@ public class RightClickMenu extends JPopupMenu{
     public RightClickMenu(MainWindow main){
         this.mainWindow = main;
         JMenuItem reset = new JMenuItem(RESET_MENU);
-        reset.setAction(new AbstractAction(){
+        add(reset);
+        reset.addActionListener(new ActionListener(){
 
             @Override
             public void actionPerformed(ActionEvent e) {
                 // TODO Auto-generated method stub
-                mainWindow.connecter.reset();
+                mainWindow.connecter.resetState();
             }
-            
+
         });
-        add(reset);
 
     }
     

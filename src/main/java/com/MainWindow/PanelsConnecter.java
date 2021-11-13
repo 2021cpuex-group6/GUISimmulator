@@ -1,5 +1,7 @@
 package com.MainWindow;
 
+import com.outerProcess.Command;
+import com.outerProcess.OuterProcessHandler;
 import com.utils.BaseNumber;
 
 public class PanelsConnecter {
@@ -52,12 +54,26 @@ public class PanelsConnecter {
         return mainWindow.memoryTablePanel.getNowStartAddress();
     }
 
-    public void reset(){
-
+    public void resetAll(){
+        mainWindow.processHandler.shutdown();
+        resetState();
+        mainWindow.instructionPanel.reset();
+        
     }
 
     public void changeBase(BaseNumber base, boolean signed){
         mainWindow.registersPanel.changeBase(base, signed);
+    }
+
+    // 開いているファイルはリセットせず，命令を実行前の状態に戻す
+    public void resetState(){
+        if(mainWindow.processHandler != null){
+            mainWindow.processHandler.doSingleCommand(Command.Reset);
+            mainWindow.instructionPanel.showNowInstruction(0);
+        }
+        mainWindow.registersPanel.reset();
+        mainWindow.memoryTablePanel.reset();
+
     }
 
 

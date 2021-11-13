@@ -14,6 +14,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -24,6 +25,7 @@ import com.MainWindow.PropertiesClass;
 import com.outerProcess.Command;
 import com.outerProcess.OuterProcessHandler;
 import com.utils.BaseNumber;
+import com.utils.ConstantsClass;
 
 public class ControlPanel extends JPanel {
     final static int BUTTON_N = 4;
@@ -52,6 +54,9 @@ public class ControlPanel extends JPanel {
     private static final String BACK_B_DESCRIPTION = "命令を一つ戻る";
 
     private static final String LAST_DIRECTORY = "lastDirectory";
+    private static final String USE_BINARY_CHECK = "バイナリファイルを使用";
+
+    public JCheckBox useBinary;
 
 
     private JButton nextButton;
@@ -102,7 +107,7 @@ public class ControlPanel extends JPanel {
         JPanel outerPanel = new JPanel(new BorderLayout());
 
         outerPanel.add(innerPanel, BorderLayout.NORTH);
-        outerPanel.add(getRadioPanel());
+        outerPanel.add(getRadioPanel(), BorderLayout.CENTER);
         outerPanel.add(getFilePanel(), BorderLayout.SOUTH);
 
         add(Box.createHorizontalStrut(BUTTON_H/4), BorderLayout.NORTH);
@@ -115,6 +120,7 @@ public class ControlPanel extends JPanel {
     }
 
     private JPanel getFilePanel(){
+        JPanel outerPanel = new JPanel(new BorderLayout());
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 
@@ -142,10 +148,10 @@ public class ControlPanel extends JPanel {
                     PropertiesClass.setProperties(property);
                     String filePath = opendFile.getPath();
                     fileLabel.setText(filePath);
-                    mainWindow.connecter.instructionFileSet(filePath);
                     if(mainWindow.processHandler != null){
-                        mainWindow.processHandler.shutdown();
+                        mainWindow.connecter.resetAll();
                     }
+                    mainWindow.connecter.instructionFileSet(filePath);
                     mainWindow.processHandler = new OuterProcessHandler(mainWindow, filePath);
 
                 }
@@ -154,11 +160,22 @@ public class ControlPanel extends JPanel {
 
         });
 
+        useBinary = new JCheckBox(USE_BINARY_CHECK, false);
+        useBinary.setEnabled(false);
+        JPanel checkPanel = new JPanel();
+        checkPanel.setLayout(new BoxLayout(checkPanel, BoxLayout.X_AXIS));
+        checkPanel.add(Box.createHorizontalStrut(BUTTON_W));
+        checkPanel.add(useBinary);
+
         panel.add(Box.createHorizontalStrut(BUTTON_W));
         panel.add(button);
         panel.add(fileLabel);
 
-        return panel;
+        outerPanel.add(panel, BorderLayout.NORTH);
+        outerPanel.add(Box.createHorizontalStrut(ConstantsClass.SEPARATE_INTERVAL), BorderLayout.CENTER);
+        outerPanel.add(checkPanel);
+
+        return outerPanel;
     }
 
     private JPanel getRadioPanel(){
@@ -219,7 +236,7 @@ public class ControlPanel extends JPanel {
         outerPanel.add(panel);
         outerPanel.add(Box.createVerticalStrut(BUTTON_H/4), BorderLayout.SOUTH);
 
-        outerPanel.setMinimumSize(new Dimension(PANEL_W/2, BUTTON_H));
+        outerPanel.setMinimumSize(new Dimension(PANEL_W/2, BUTTON_H * 2));
 
         return outerPanel;
 

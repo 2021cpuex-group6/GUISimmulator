@@ -8,6 +8,8 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.BorderLayout;
 import java.util.Properties;
 
@@ -26,7 +28,7 @@ import com.components.MemoryTable.MemoryTablePanel;
 import com.components.registers.RegistersPane;
 import com.outerProcess.OuterProcessHandler;
 
-public class MainWindow extends JFrame implements WindowListener{
+public class MainWindow extends JFrame implements WindowListener, MouseListener{
     private final static int GRID_W = 5;
     private final static int GRID_H = 5;
     private final static String TITLE = "CPUSimmulator";
@@ -58,6 +60,7 @@ public class MainWindow extends JFrame implements WindowListener{
         Integer.parseInt(properties.getProperty(INIT_W)), Integer.parseInt(properties.getProperty(INIT_H)));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         addWindowListener(this);
+        addMouseListener(this);
 
         
         JPanel outerPanel = new JPanel(new BorderLayout());
@@ -183,6 +186,35 @@ public class MainWindow extends JFrame implements WindowListener{
 
     @Override
     public void windowDeactivated(WindowEvent e) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
         // TODO Auto-generated method stub
         
     }

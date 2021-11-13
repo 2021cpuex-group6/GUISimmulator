@@ -12,6 +12,7 @@ public class MenuBar extends JMenuBar{
     private final static String MENU_TOOL = "ツール";
 
     private final static String ITEM_TRANSLATOR = "変換ツール";
+    private final static String ITEM_RESET = "リセット";
 
     private MainWindow main;
     public MenuBar(MainWindow mainWindow){
@@ -20,6 +21,7 @@ public class MenuBar extends JMenuBar{
         JMenu toolMenu = new JMenu(MENU_TOOL);
 
         JMenuItem translatorItem = new JMenuItem(ITEM_TRANSLATOR);
+        JMenuItem resetItem = new JMenuItem(ITEM_RESET);
         translatorItem.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -27,7 +29,15 @@ public class MenuBar extends JMenuBar{
                 
             }
         });
+        resetItem.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                main.connecter.resetState();                
+            }
+        });
         toolMenu.add(translatorItem);
+        toolMenu.add(resetItem);
 
         add(toolMenu);
 

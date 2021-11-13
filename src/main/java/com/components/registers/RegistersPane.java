@@ -52,6 +52,17 @@ public class RegistersPane extends JPanel{
 
     }
 
+    // 初期状態に戻す
+    public void reset(){
+        for (int i = 0; i < ConstantsClass.REGISTER_N + 1; i++) {
+            iRegisters.get(i).setHighlighted(false);
+            iRegisters.get(i).setFieldV(0);
+            fRegisters.get(i).setHighlighted(false);
+            fRegisters.get(i).setFieldV(0);
+        }
+
+    }
+
     private JPanel getIPanel(){
         JPanel panel = new JPanel();
         // panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));

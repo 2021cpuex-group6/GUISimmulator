@@ -42,6 +42,11 @@ public class InstructionTablePanel extends JPanel{
 
     }
 
+    public void reset(){
+        table.setModel(new InstructionTableModel());
+
+    }
+
     public void setTable(String filePath){
         // ファイルを読み込んでそれを表に表示する
         model = new InstructionTableModel(filePath);

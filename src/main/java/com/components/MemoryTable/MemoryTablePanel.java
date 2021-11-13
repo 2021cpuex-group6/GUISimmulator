@@ -62,15 +62,8 @@ public class MemoryTablePanel extends JPanel{
         scrollPane.getVerticalScrollBar().setUnitIncrement(ConstantsClass.SCROLL_INCREMENT);
 
         
-        model = new MemoryTableModel(getInitTableData());
-        table = new JTable(model);
-        table.setShowVerticalLines(false);
-        table.setShowHorizontalLines(false);
-        table.setBorder(BorderFactory.createEmptyBorder());
-        table.setIntercellSpacing(new Dimension());
-        MemoryTableCellRenderer rendrer = new MemoryTableCellRenderer();
-        table.setDefaultRenderer(Byte.class, rendrer);
-        tableSetting();
+        table = new JTable();
+        reset();
         scrollPane.setViewportView(table);
 
         add(getControlPanel(), BorderLayout.NORTH);
@@ -79,6 +72,18 @@ public class MemoryTablePanel extends JPanel{
 
         setPreferredSize(new Dimension(200, 500));
 
+    }
+
+    public void reset(){
+        model = new MemoryTableModel(getInitTableData());
+        table.setModel(model);
+        table.setShowVerticalLines(false);
+        table.setShowHorizontalLines(false);
+        table.setBorder(BorderFactory.createEmptyBorder());
+        table.setIntercellSpacing(new Dimension());
+        MemoryTableCellRenderer rendrer = new MemoryTableCellRenderer();
+        table.setDefaultRenderer(Byte.class, rendrer);
+        tableSetting();
     }
 
     // 特に初期データがないとき
