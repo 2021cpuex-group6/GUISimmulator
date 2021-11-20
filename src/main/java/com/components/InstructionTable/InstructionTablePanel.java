@@ -61,6 +61,8 @@ public class InstructionTablePanel extends JPanel{
         columnModel.getColumn(0).setMaxWidth(BREAK_C_WIDTH);
         columnModel.getColumn(1).setMaxWidth(ADDRESS_C_WIDTH);
         columnModel.getColumn(2).setMaxWidth(INSTRUCTION_C_WIDTH);
+        InstructionTableCellRenderer checkBoxRenderer = new InstructionTableCellRenderer();
+        table.getColumnModel().getColumn(0).setCellRenderer(checkBoxRenderer);
         
 
     }

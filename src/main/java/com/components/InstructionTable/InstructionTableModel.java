@@ -110,11 +110,19 @@ public class InstructionTableModel extends DefaultTableModel{
         }
     }
 
+    // その行が命令行ならtrue, コメント，ラベルなどならfalse
+    protected boolean isInstRow(int row){
+        if(row < 0 || row >= addressList.size()) return false;
+        return addressList.get(row) != NOT_INST_ROW;
+    }
+
     @Override public boolean isCellEditable(int row, int column) {
         // breakPoints以外は編集不可
         if(column == BREAK_C_NUM){
-            return true;
+            return isInstRow(row);
         }
         return false;
       }
+
+    
 }
