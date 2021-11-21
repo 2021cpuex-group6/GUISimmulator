@@ -8,8 +8,11 @@ import java.util.ArrayList;
 import java.util.Vector;
 import java.util.regex.Pattern;
 
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
+import com.MainWindow.MainWindow;
 import com.utils.ConstantsClass;
 import com.utils.ErrorChecker;
 
@@ -28,6 +31,7 @@ public class InstructionTableModel extends DefaultTableModel{
     private Vector<String> addressList;
     private Vector<Boolean> breakList;
     protected ArrayList<Integer> lineList; // 命令アドレス/4からファイルの行数へのマップ
+    private MainWindow main;
     
     public InstructionTableModel(){
         super();
@@ -37,8 +41,9 @@ public class InstructionTableModel extends DefaultTableModel{
 
     }
 
-    public InstructionTableModel(String filepath){
+    public InstructionTableModel(String filepath, MainWindow mainWindow){
         super();
+        this.main = mainWindow;
 
         int lineN=0;
         try {
@@ -97,6 +102,8 @@ public class InstructionTableModel extends DefaultTableModel{
         addColumn(ADDRESS_COLUMN, addressList);
         addColumn(INSTRUCTION_COLUMN, instructionList);
 
+
+
     }
 
     public Class<?> getColumnClass(int column){
@@ -124,5 +131,16 @@ public class InstructionTableModel extends DefaultTableModel{
         return false;
       }
 
+    @Override
+    public void setValueAt(Object val, int rowIndex, int columnIndex) {
+        super.setValueAt(val, rowIndex, columnIndex);
+        if(columnIndex == 0){
+            // ブレークポイントの設定
+            main.processHandler.breakPointChange((boolean) val , rowIndex);
+        }          
+    }
+
+    
+    
     
 }

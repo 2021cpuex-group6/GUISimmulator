@@ -49,7 +49,7 @@ public class ControlPanel extends JPanel {
     private final static String UNSIGNED_RADIO = "UNSIGNED";
 
     private static final String NEXT_B_DESCRIPTION = "次の命令を実行";
-    private static final String NEXT_BB_DESCRIPTION = "次のブレークポイントまでを実行(未実装)";
+    private static final String NEXT_BB_DESCRIPTION = "次のブレークポイントまでを実行";
     private static final String NEXT_AB_DESCRIPTION = "全命令実行";
     private static final String BACK_B_DESCRIPTION = "命令を一つ戻る";
 

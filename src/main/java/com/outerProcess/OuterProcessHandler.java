@@ -18,11 +18,14 @@ public class OuterProcessHandler {
     private final static String SIMMULATOR_EXE = "main.exe";
     private final static String CHARA_CODE = "Shift-JIS";
     private final static String ERROR_CODE = "Error";
+    private final static String WARNING_CODE = "Warning";
     private final static String BUG_REPORT = "バグと思われるので報告お願いします。";
     private final static String INVALID_ARG_BUG = "バグ: 引数を間違えています。";
     private final static String ALREADY_END = "すでに終了しています。ツールメニュー→リセットを押してください。";
     private final static String NO_HISTORY = "これ以上戻れません。";
     private final static String FILE_ENDED = "終了しました。";
+    private final static String NOW_EXECUTING = "実行中…";
+    private final static String STOPPED = "中断しました";
 
     protected final static String COMMAND_DO_ALL = "a";
     protected final static String COMMAND_NEXT_BLOCK = "nb";
@@ -129,6 +132,7 @@ public class OuterProcessHandler {
         String res;
         switch(command){
             case DoAll:
+                mainWindow.setMessage(NOW_EXECUTING);
                 res  = receiveWithCheck();
                 if(res.startsWith(RES_ALREADY_END)){
                     // すでに終了済
@@ -139,6 +143,7 @@ public class OuterProcessHandler {
                     int nowPC = mainWindow.connecter.getPC();
                     mainWindow.connecter.showNowInstruction(nowPC-ConstantsClass.INSTRUCTION_BYTE_N);
                     memSynchronize();
+                    mainWindow.setMessage(FILE_ENDED);
                 }
                 break;
             case DoNext:
@@ -159,6 +164,22 @@ public class OuterProcessHandler {
                     break;
                 }
                 checkDif(res, true);
+                break;
+            case DoNextBreak:
+                mainWindow.setMessage(NOW_EXECUTING);
+                res  = receiveWithCheck();
+                if(res.startsWith(RES_ALREADY_END)){
+                    // すでに終了済
+                    mainWindow.setMessage(ALREADY_END);
+                    return;
+                }else{
+                    readRegisters();
+                    memSynchronize();
+                    mainWindow.setMessage(FILE_ENDED);
+                    int nowPC = mainWindow.connecter.getPC();
+                    if(res == RES_END) nowPC -= ConstantsClass.INSTRUCTION_BYTE_N;
+                    mainWindow.connecter.showNowInstruction(nowPC);
+                }
                 break;
             case Quit:
                 resErrorCheck();
@@ -231,7 +252,7 @@ public class OuterProcessHandler {
     private void resErrorCheck(){
         try {
             if(receiver.ready()){
-                if(receiver.readLine().startsWith(ERROR_CODE)){
+                if(receiver.readLine().startsWith(ERROR_CODE) || receiver.readLine().startsWith(WARNING_CODE)){
                     String message = ERROR_CODE;
                     int lineN = Integer.parseInt(receiver.readLine());
                     if(lineN >= 0){
@@ -340,6 +361,13 @@ public class OuterProcessHandler {
             mainWindow.connecter.setRegister(false, i, Integer.parseInt(resultsF[i]), false);
         }
 
+    }
+
+    public void breakPointChange(boolean set, int address){
+        String command = set ? COMMAND_BREAK_SET : COMMAND_BREAK_DELETE ;
+        command = command + " " +  address;
+        sendCommand(command);
+        resErrorCheck();
     }
 
     

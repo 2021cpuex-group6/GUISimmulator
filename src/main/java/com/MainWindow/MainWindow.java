@@ -104,7 +104,7 @@ public class MainWindow extends JFrame implements WindowListener, MouseListener{
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         
         controlPanel = new ControlPanel(properties, this);
-        instructionPanel = new InstructionTablePanel();
+        instructionPanel = new InstructionTablePanel(this);
 
         panel.add(instructionPanel);
         panel.add(controlPanel);

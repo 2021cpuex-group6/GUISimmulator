@@ -3,6 +3,9 @@ package com.components.InstructionTable;
 import java.awt.Color;
 import java.awt.Component;
 
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import javax.swing.JCheckBox;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
@@ -14,6 +17,7 @@ import javax.swing.table.TableCellRenderer;
 
 class InstructionTableCellRenderer extends JCheckBox implements TableCellRenderer, UIResource {
     private static final Border noFocusBorder = new EmptyBorder(1, 1, 1, 1);
+    private int rowI = 0;
     public InstructionTableCellRenderer() {
       super();
       setHorizontalAlignment(SwingConstants.CENTER);
@@ -24,8 +28,10 @@ class InstructionTableCellRenderer extends JCheckBox implements TableCellRendere
   
     @Override public Component getTableCellRendererComponent(JTable table, Object value,
           boolean isSelected, boolean hasFocus, int row, int column) {
+        this.rowI = row;
         InstructionTableModel model = (InstructionTableModel) table.getModel();
         boolean isInstRow = model.isInstRow(row);
+
         setEnabled(isInstRow);
         
         if (isSelected) {
@@ -41,7 +47,6 @@ class InstructionTableCellRenderer extends JCheckBox implements TableCellRendere
         } else {
             setBorder(noFocusBorder);
         }
-
 
         return this;
     }

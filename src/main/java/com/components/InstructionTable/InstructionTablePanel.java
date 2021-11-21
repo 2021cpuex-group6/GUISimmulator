@@ -8,6 +8,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
 
+import com.MainWindow.MainWindow;
 import com.utils.ConstantsClass;
 
 import java.awt.BorderLayout;
@@ -20,17 +21,27 @@ public class InstructionTablePanel extends JPanel{
 
     private InstructionTableModel model;
     private JTable table;
+    protected MainWindow mainWindow;
+    private boolean selectionChangable = false;
 
 
-    public InstructionTablePanel(){
+    public InstructionTablePanel(MainWindow mainWindow){
         super();
+        this.mainWindow = mainWindow;
         setLayout(new BorderLayout());
 
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.getVerticalScrollBar().setUnitIncrement(ConstantsClass.SCROLL_INCREMENT);
         
         model = new InstructionTableModel();
-        table = new JTable(model);
+        table = new JTable(model){
+            @Override
+            public void changeSelection(
+            int rowIndex, int columnIndex, boolean toggle, boolean extend) {
+                if(selectionChangable) super.changeSelection(rowIndex, columnIndex, toggle, extend);
+            }
+
+        };
         tableSetting();
         scrollPane.setViewportView(table);
 
@@ -49,7 +60,7 @@ public class InstructionTablePanel extends JPanel{
 
     public void setTable(String filePath){
         // ファイルを読み込んでそれを表に表示する
-        model = new InstructionTableModel(filePath);
+        model = new InstructionTableModel(filePath, mainWindow);
         table.setModel(model);
         tableSetting();
 
@@ -71,8 +82,10 @@ public class InstructionTablePanel extends JPanel{
         // 現在の命令にスクロール、強調表示
         int row = (PC - ConstantsClass.INSTRUCTION_START_ADDRESS) / ConstantsClass.INSTRUCTION_BYTE_N;
         row = model.lineList.get(row);
+        selectionChangable = true;
         table.changeSelection(row, 1, false, false);
         table.changeSelection(row, 1, false, true);
+        selectionChangable = false;
     }
     
 }
