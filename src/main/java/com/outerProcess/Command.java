@@ -11,7 +11,8 @@ public enum Command {
     RegWrite(OuterProcessHandler.COMMAND_REG_WRITE), 
     Reset(OuterProcessHandler.COMMAND_RESET), 
     Info(OuterProcessHandler.COMMAND_INFO), 
-    Quit(OuterProcessHandler.COMMAND_QUIT);
+    Quit(OuterProcessHandler.COMMAND_QUIT),
+    OUTPUT(OuterProcessHandler.COMMAND_OUTPUT);
 
     private String command;
     private Command(String command){

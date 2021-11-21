@@ -23,12 +23,14 @@ public class MMIOChecker extends JFrame{
     private final static String INIT_W = "initW";
     private final static String INIT_H = "initH";
 
+    private final static String NOT_STARTED = "実行前です．ファイルを実行してから開いてください．";
+
     protected Properties properties;
     protected JTextArea resultField;
     protected JTextField field;
     private MainWindow mainWindow;
     
-    public MMIOChecker(MainWindow mainWindow){
+    public MMIOChecker(Properties properties, MainWindow mainWindow){
         super();
         this.mainWindow = mainWindow;
         setTitle(TITLE);
@@ -52,9 +54,16 @@ public class MMIOChecker extends JFrame{
 
         
         
-        JTextArea textarea = new JTextArea("", 40, 20);
-        JScrollPane scrollpane = new JScrollPane(textarea);
-        outerPanel.add(scrollpane, BorderLayout.CENTER);
+        JTextArea textArea = new JTextArea("", 40, 20);
+        textArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        outerPanel.add(scrollPane, BorderLayout.CENTER);
+        if(mainWindow.processHandler != null){
+            mainWindow.processHandler.getMMIOInfo(textArea);
+        }else{
+            textArea.setText(NOT_STARTED);
+        }
+
         
         
         return outerPanel;

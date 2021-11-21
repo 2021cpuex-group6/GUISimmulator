@@ -8,6 +8,7 @@ import java.io.PrintStream;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 
 import com.MainWindow.MainWindow;
 import com.utils.ConstantsClass;
@@ -26,6 +27,7 @@ public class OuterProcessHandler {
     private final static String FILE_ENDED = "終了しました。";
     private final static String NOW_EXECUTING = "実行中…";
     private final static String STOPPED = "中断しました";
+    private final static String OUTPUTED_PPM = "ファイルに出力しました．";
 
     protected final static String COMMAND_DO_ALL = "a";
     protected final static String COMMAND_NEXT_BLOCK = "nb";
@@ -40,6 +42,8 @@ public class OuterProcessHandler {
     protected final static String COMMAND_INFO = "i";
     protected final static String COMMAND_QUIT = "quit";
     protected final static String COMMAND_MEMREAD = "mr";
+    protected final static String COMMAND_IO = "io";
+    protected final static String COMMAND_OUTPUT = "out";
 
     private final static String RES_END = "End";
     private final static String RES_ALREADY_END = "AEnd";
@@ -48,6 +52,8 @@ public class OuterProcessHandler {
     private final static String RES_NO_HISTORY = "NoHis";
     private final static String RES_MEMCHANGE = "mem";
     private final static String RES_SEND = "send";
+    private final static String EXITED = "Exited";
+    private final static String FINISHED = "Finished.";
     
     private MainWindow mainWindow;
     private PrintStream sender; // プログラムに送る
@@ -176,14 +182,29 @@ public class OuterProcessHandler {
                 }else{
                     readRegisters();
                     memSynchronize();
-                    mainWindow.setMessage(FILE_ENDED);
                     int nowPC = mainWindow.connecter.getPC();
-                    if(res == RES_END) nowPC -= ConstantsClass.INSTRUCTION_BYTE_N;
+                    mainWindow.setMessage(STOPPED);
+                    if(res == RES_END){
+                        nowPC -= ConstantsClass.INSTRUCTION_BYTE_N;
+                        mainWindow.setMessage(FILE_ENDED);
+                    }
                     mainWindow.connecter.showNowInstruction(nowPC);
                 }
                 break;
             case Quit:
-                resErrorCheck();
+                res = receiveWithCheck();
+                if(res.equals(EXITED)){
+                }else{
+                    ErrorChecker.errorCheck("shutdown 内:" + BUG_REPORT);
+                }
+                break;
+            case OUTPUT:
+                res = receiveWithCheck();
+                if(res.equals(FINISHED)){
+                    mainWindow.setMessage(OUTPUTED_PPM);
+                }else{
+                    ErrorChecker.errorCheck("doSingleCommand 内:" + BUG_REPORT);
+                }
                 break;
             default:
                 break;
@@ -228,6 +249,7 @@ public class OuterProcessHandler {
     // main.exe を終了する
     public void shutdown(){
         doSingleCommand(Command.Quit);
+
         process.destroy();
     }
 
@@ -373,5 +395,28 @@ public class OuterProcessHandler {
         resErrorCheck();
     }
 
+    // TextAreaにMMIOの情報を書き込む
+    public void getMMIOInfo(JTextArea textArea){
+        sendCommand(COMMAND_IO);
+        int count = 0;
+        int limit = 3;
+        try {
+            while(true){
+                String line = receiver.readLine();
+                if(++count == 3){
+                    // 3行目に残り行数が書いてある
+                    limit += Integer.parseInt(line);
+                }else{
+                    textArea.append(line);
+                    textArea.append(System.lineSeparator());
+                }
+
+                if(count == limit) break;
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            ErrorChecker.errorCheck(e);
+        }
+    }
     
 }
