@@ -59,9 +59,13 @@ public class OuterProcessHandler {
     private PrintStream sender; // プログラムに送る
     private BufferedReader receiver; //結果受け取り
     private Process process;
+    private WaitFrame wait;
+    private Object lock;  // 長時間実行中の時の処理の排他制御用
+    private boolean ended = false;
     // 開くアセンブリファイル (or バイナリコード)を指定してプロセスを起動する
     public OuterProcessHandler(MainWindow main, String path){
         this.mainWindow = main;
+        this.lock = new Object();
         try {
             process = Runtime.getRuntime().exec(SIMMULATOR_EXE + " \""+ path + "\" -g");
             sender = new PrintStream(process.getOutputStream());
@@ -128,6 +132,64 @@ public class OuterProcessHandler {
 
     }
 
+
+    private void resCheckThread(){
+        wait = new WaitFrame(mainWindow);
+        Thread thread = new Thread(){
+            @Override 
+            public void run(){
+                String res  = receiveWithCheck();
+                if(res.startsWith(RES_ALREADY_END)){
+                    // すでに終了済
+                    mainWindow.setMessage(ALREADY_END);
+                    return;
+                }else{
+                    readRegisters();
+                    memSynchronize();
+                    int nowPC = mainWindow.connecter.getPC();
+                    mainWindow.setMessage(STOPPED);
+                    if(res.equals(RES_END)){
+                        nowPC -= ConstantsClass.INSTRUCTION_BYTE_N;
+                        mainWindow.setMessage(FILE_ENDED);
+                    }
+                    mainWindow.connecter.showNowInstruction(nowPC);
+                }
+
+                synchronized(lock){
+                    if(wait.isVisible()){
+                        wait.dispose();
+                        mainWindow.toFront();
+                        mainWindow.repaint();
+                        mainWindow.setEnabled(true);
+                    }else{
+                        ended = true;
+                    }
+                }
+
+            }
+        };
+        thread.start();
+        try {
+            Thread.sleep(200);
+            synchronized(lock){
+                if(!ended){
+                    // まだ処理中
+                    wait.setVisible(true);
+                    wait.setAlwaysOnTop(true);
+                    mainWindow.setEnabled(false);
+                }
+            }
+
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        ended = false;
+
+        
+    }
+
     // 特に引数を受け取らない命令を実行する
     public void doSingleCommand(Command command){
         if(command == Command.BreakDelete || command == Command.BreakSet || 
@@ -138,20 +200,9 @@ public class OuterProcessHandler {
 
         String res;
         switch(command){
+            case DoNextBreak:
             case DoAll:
-                mainWindow.setMessage(NOW_EXECUTING);
-                res  = receiveWithCheck();
-                if(res.startsWith(RES_ALREADY_END)){
-                    // すでに終了済
-                    mainWindow.setMessage(ALREADY_END);
-                    return;
-                }else{
-                    readRegisters();
-                    int nowPC = mainWindow.connecter.getPC();
-                    mainWindow.connecter.showNowInstruction(nowPC-ConstantsClass.INSTRUCTION_BYTE_N);
-                    memSynchronize();
-                    mainWindow.setMessage(FILE_ENDED);
-                }
+                resCheckThread();
                 break;
             case DoNext:
                 res = receiveWithCheck();
@@ -171,25 +222,6 @@ public class OuterProcessHandler {
                     break;
                 }
                 checkDif(res, true);
-                break;
-            case DoNextBreak:
-                mainWindow.setMessage(NOW_EXECUTING);
-                res  = receiveWithCheck();
-                if(res.startsWith(RES_ALREADY_END)){
-                    // すでに終了済
-                    mainWindow.setMessage(ALREADY_END);
-                    return;
-                }else{
-                    readRegisters();
-                    memSynchronize();
-                    int nowPC = mainWindow.connecter.getPC();
-                    mainWindow.setMessage(STOPPED);
-                    if(res == RES_END){
-                        nowPC -= ConstantsClass.INSTRUCTION_BYTE_N;
-                        mainWindow.setMessage(FILE_ENDED);
-                    }
-                    mainWindow.connecter.showNowInstruction(nowPC);
-                }
                 break;
             case Quit:
                 res = receiveWithCheck();
@@ -250,6 +282,10 @@ public class OuterProcessHandler {
     public void shutdown(){
         doSingleCommand(Command.Quit);
 
+        process.destroy();
+    }
+
+    public void forceToShutdown(){
         process.destroy();
     }
 

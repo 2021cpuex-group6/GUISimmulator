@@ -27,6 +27,7 @@ import com.components.InstructionTable.InstructionTablePanel;
 import com.components.MemoryTable.MemoryTablePanel;
 import com.components.registers.RegistersPane;
 import com.outerProcess.OuterProcessHandler;
+import com.utils.ErrorChecker;
 
 public class MainWindow extends JFrame implements WindowListener, MouseListener{
     private final static int GRID_W = 5;
@@ -138,6 +139,13 @@ public class MainWindow extends JFrame implements WindowListener, MouseListener{
     
     public void setMessage(String text){
         messageLabel.setText(text);
+        messageLabel.repaint();
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            ErrorChecker.errorCheck(e);
+        }
         Toolkit.getDefaultToolkit().beep();
 
     }
