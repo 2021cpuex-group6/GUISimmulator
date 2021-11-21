@@ -47,6 +47,7 @@ public class OuterProcessHandler {
     private final static String RES_NO_CHANGE = "No";
     private final static String RES_NO_HISTORY = "NoHis";
     private final static String RES_MEMCHANGE = "mem";
+    private final static String RES_SEND = "send";
     
     private MainWindow mainWindow;
     private PrintStream sender; // プログラムに送る
@@ -196,6 +197,8 @@ public class OuterProcessHandler {
             res = receiveWithCheck();
             checkMemChange(res, back);
             mainWindow.connecter.clearHighlight();;
+        }else if(res.startsWith(RES_SEND)){
+            return; //mmioはまとめてやる
         }else{
             checkRegChange(res, back);
             mainWindow.connecter.clearMemHighlight();

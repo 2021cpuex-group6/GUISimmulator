@@ -6,12 +6,14 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import com.tools.MMIOChecker;
 import com.tools.Translator.Translator;
 
 public class MenuBar extends JMenuBar{
     private final static String MENU_TOOL = "ツール";
 
     private final static String ITEM_TRANSLATOR = "変換ツール";
+    private final static String ITEM_MMIO = "MMIOチェッカー";
     private final static String ITEM_RESET = "リセット";
 
     private MainWindow main;
@@ -22,6 +24,7 @@ public class MenuBar extends JMenuBar{
 
         JMenuItem translatorItem = new JMenuItem(ITEM_TRANSLATOR);
         JMenuItem resetItem = new JMenuItem(ITEM_RESET);
+        JMenuItem mmioItem = new JMenuItem(ITEM_MMIO);
         translatorItem.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -34,6 +37,13 @@ public class MenuBar extends JMenuBar{
             @Override
             public void actionPerformed(ActionEvent e) {
                 main.connecter.resetState();                
+            }
+        });
+        mmioItem.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MMIOChecker mmio = new MMIOChecker(main);
             }
         });
         toolMenu.add(translatorItem);
